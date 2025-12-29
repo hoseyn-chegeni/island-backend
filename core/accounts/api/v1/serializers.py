@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from accounts.models import User
+from accounts.models import User,Profile
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -25,3 +25,10 @@ class UserReadUpdateSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "email": {"read_only": True},
         }
+
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = '__all__'

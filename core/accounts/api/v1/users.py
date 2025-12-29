@@ -1,6 +1,6 @@
-from .serializers import UserSerializer,UserReadUpdateSerializer
-from accounts.models import User
-from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
+from .serializers import UserSerializer,UserReadUpdateSerializer, ProfileSerializer
+from accounts.models import User,Profile
+from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView,ListAPIView,RetrieveUpdateAPIView
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from .pagination import LargeResultSetPagination
@@ -22,3 +22,14 @@ class UserDetail(RetrieveUpdateDestroyAPIView):
         queryset = User.objects.all()
         lookup_field = "id"
         
+
+
+class ProfileList(ListAPIView):
+        serializer_class = ProfileSerializer
+        queryset = Profile.objects.all()
+
+
+class ProfileDetail(RetrieveUpdateAPIView):
+        serializer_class = ProfileSerializer
+        queryset = Profile.objects.all()
+        lookup_field = "id"
