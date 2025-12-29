@@ -4,7 +4,8 @@ from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIVi
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from .pagination import LargeResultSetPagination
-
+from django.db.models.functions import Concat
+from django.db.models import Value
 
 class Userlist(ListCreateAPIView):
         serializer_class = UserSerializer
@@ -27,6 +28,21 @@ class UserDetail(RetrieveUpdateDestroyAPIView):
 class ProfileList(ListAPIView):
         serializer_class = ProfileSerializer
         queryset = Profile.objects.all()
+        filter_backends = [DjangoFilterBackend, SearchFilter,OrderingFilter]
+        filterset_fields = ["gender",]
+        search_fields = ["full_name","=national_id",]
+        ordering_fields  =["created_date","updated_date","date_of_birth",]
+        pagination_class = LargeResultSetPagination
+
+
+        def get_queryset(self):
+                return Profile.objects.annotate(
+                full_name=Concat(
+                        "first_name",
+                        Value(" "),
+                        "last_name",
+                )
+                )
 
 
 class ProfileDetail(RetrieveUpdateAPIView):

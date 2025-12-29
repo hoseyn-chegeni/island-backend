@@ -29,6 +29,18 @@ class UserReadUpdateSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    user = UserReadUpdateSerializer(read_only=True)
     class Meta:
         model = Profile
-        fields = '__all__'
+        fields = [
+            "id",
+            "user",
+            "first_name",
+            "last_name",
+            "avatar_url",
+            "national_id",
+            "date_of_birth",
+            "gender",
+            "created_date",
+            "updated_date",
+        ]
