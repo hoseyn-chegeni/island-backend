@@ -1,5 +1,5 @@
 from .serializers import UserSerializer,UserReadUpdateSerializer
-from django.contrib.auth.models import User
+from accounts.models import User
 from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
