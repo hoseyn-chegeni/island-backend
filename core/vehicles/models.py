@@ -20,3 +20,15 @@ class Vehicle(models.Model):
 
     def __str__(self):
         return f"{self.brand} {self.model} - {self.plate_number}"
+    
+
+from django.db import models
+
+
+class VehicleImage(models.Model):
+    vehicle = models.ForeignKey("vehicles.Vehicle",on_delete=models.CASCADE,related_name="images")
+    image = models.ImageField(upload_to="vehicles/")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Image for Vehicle #{self.vehicle_id}"

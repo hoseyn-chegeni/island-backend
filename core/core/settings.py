@@ -153,3 +153,6 @@ SIMPLE_JWT = {
     "USER_ID_CLAIM": "user_id",
     "CHECK_USER_IS_ACTIVE": True,
 }
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "images"
