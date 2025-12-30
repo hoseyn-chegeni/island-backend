@@ -39,3 +39,9 @@ class VehicleSerializer(serializers.ModelSerializer):
 
 
 
+class VehicleImageAddSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VehicleImage
+        fields = ["id", "vehicle", "image", "created_at"]
+        read_only_fields = ["id", "created_at"]
+    image = serializers.ImageField()
