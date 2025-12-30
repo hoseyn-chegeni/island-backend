@@ -27,14 +27,17 @@ schema_view = get_schema_view(
         default_version="v1",
     ),
     public=True,
-    permission_classes=[permissions.AllowAny]
+    permission_classes=[permissions.AllowAny],
 )
 
 
-
 urlpatterns = [
-    path('docs/',schema_view.with_ui("swagger",cache_timeout=0),name= "schema_swagger_ui"),
+    path(
+        "docs/",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema_swagger_ui",
+    ),
     path("admin/", admin.site.urls),
-    path("accounts/",include("accounts.urls"))
-    
+    path("accounts/", include("accounts.urls")),
+    path("vehicles/", include("vehicles.urls")),
 ]

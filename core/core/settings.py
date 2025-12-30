@@ -16,9 +16,7 @@ from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-env = environ.Env(
-    DEBUG=(bool, False)
-)
+env = environ.Env(DEBUG=(bool, False))
 
 environ.Env.read_env(BASE_DIR / ".env")
 
@@ -42,9 +40,9 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_filters",
     "drf_yasg",
-    'rest_framework_simplejwt',
+    "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
-
+    "vehicles",
 ]
 
 MIDDLEWARE = [
@@ -132,32 +130,26 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
- 
+
 AUTH_USER_MODEL = "accounts.User"
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     )
 }
-
 
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(
         minutes=env.int("ACCESS_TOKEN_MINUTES", default=15)
     ),
-    "REFRESH_TOKEN_LIFETIME": timedelta(
-        days=env.int("REFRESH_TOKEN_DAYS", default=7)
-    ),
-
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=env.int("REFRESH_TOKEN_DAYS", default=7)),
     "ROTATE_REFRESH_TOKENS": env.bool("ROTATE_REFRESH_TOKENS", default=True),
     "BLACKLIST_AFTER_ROTATION": env.bool("BLACKLIST_AFTER_ROTATION", default=True),
-
     "AUTH_HEADER_TYPES": ("Bearer",),
     "USER_ID_FIELD": "id",
     "USER_ID_CLAIM": "user_id",
-
     "CHECK_USER_IS_ACTIVE": True,
 }
