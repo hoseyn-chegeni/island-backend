@@ -54,7 +54,7 @@ class ProfileDetail(RetrieveUpdateAPIView):
         lookup_field = "id"
 
 
-
+# TODO: Switch to phone number and OTP registration
 class RegistrationAPIView(generics.GenericAPIView):
         serializer_class = RegistrationSerializer
         def post(self,request,*args,**kwargs):
