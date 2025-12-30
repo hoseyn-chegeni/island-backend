@@ -1,4 +1,4 @@
-from .serializers import UserSerializer,UserReadUpdateSerializer, ProfileSerializer, RegistrationSerializer
+from .serializers import UserSerializer,UserReadUpdateSerializer, ProfileSerializer, RegistrationSerializer,PasswordChangeSerializer
 from accounts.models import User,Profile
 from rest_framework.generics import RetrieveUpdateDestroyAPIView,ListAPIView,RetrieveUpdateAPIView
 from django_filters.rest_framework import DjangoFilterBackend
@@ -9,6 +9,12 @@ from django.db.models import Value
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth import update_session_auth_hash
+
+
+
 
 class Userlist(ListAPIView):
         serializer_class = UserSerializer
@@ -60,10 +66,40 @@ class RegistrationAPIView(generics.GenericAPIView):
         def post(self,request,*args,**kwargs):
                 serializer = RegistrationSerializer(data=request.data)
                 if serializer.is_valid():
-                        serializer.save()
+                        user = serializer.save()
+                        refresh = RefreshToken.for_user(user)
+                        access = str(refresh.access_token)
                         data = {
-                                'email':serializer.validated_data['email']
+                                'user': {
+                                'id': user.id,
+                                'email': user.email
+                                },
+                                'access': access,
+                                'refresh': str(refresh)
                         }
 
                         return Response(data, status=status.HTTP_201_CREATED)
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+
+
+class ChangePasswordAPIView(generics.UpdateAPIView):
+    serializer_class = PasswordChangeSerializer
+    model = User
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            if not user.check_password(serializer.validated_data["old_password"]):
+                return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
+            user.set_password(serializer.validated_data["new_password"])
+            user.save()
+            # optional: keep user logged in after password change
+            update_session_auth_hash(request, user)
+            return Response({"detail": "Password updated successfully"}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
