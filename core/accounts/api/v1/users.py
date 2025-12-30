@@ -23,18 +23,43 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import update_session_auth_hash
-
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 class Userlist(ListAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = [
-        "is_active",
-    ]
+    filterset_fields = ["is_active"]
     search_fields = ["=username", "email"]
     ordering_fields = ["date_joined"]
     pagination_class = LargeResultSetPagination
+
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter(
+                "is_active",
+                openapi.IN_QUERY,
+                description="Filter by active status (True or False)",
+                type=openapi.TYPE_BOOLEAN,
+            ),
+            openapi.Parameter(
+                "search",
+                openapi.IN_QUERY,
+                description="Search by username or email",
+                type=openapi.TYPE_STRING,
+            ),
+            openapi.Parameter(
+                "ordering",
+                openapi.IN_QUERY,
+                description="Order by field. Use 'date_joined' or '-date_joined' for descending",
+                type=openapi.TYPE_STRING,
+                enum=["date_joined", "-date_joined"],  # Dropdown in Swagger
+            ),
+        ]
+    )
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
 
 class UserDetail(RetrieveUpdateDestroyAPIView):
