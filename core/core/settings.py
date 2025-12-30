@@ -81,7 +81,7 @@ WSGI_APPLICATION = "core.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "kish_db",
+        "NAME": "island_db",
         "USER": "postgres",
         "PASSWORD": "root1234",
         "HOST":  "db",
