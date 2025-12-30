@@ -9,6 +9,7 @@ services:
              python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./core:/app
+      - ./media:/app/media
     ports:
       - "8000:8000"
     environment:
