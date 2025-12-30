@@ -1,5 +1,5 @@
 from django.urls import path
-from .v1.users import Userlist,UserDetail,ProfileList,ProfileDetail, RegistrationAPIView, ChangePasswordAPIView
+from .v1.users import Userlist,UserDetail,ProfileList,ProfileDetail, RegistrationAPIView, ChangePasswordAPIView, LogoutAPIView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView,TokenVerifyView
 
 
@@ -15,5 +15,6 @@ urlpatterns = [
     path('login/',TokenObtainPairView.as_view()),
     path('jwt/refresh/',TokenRefreshView.as_view()),
     path('jwt/verify/',TokenVerifyView.as_view()),
-    path('password/change/', ChangePasswordAPIView.as_view())
+    path('password/change/', ChangePasswordAPIView.as_view()),
+    path('logout/', LogoutAPIView.as_view()),
 ] 

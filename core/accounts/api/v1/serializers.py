@@ -68,3 +68,7 @@ class PasswordChangeSerializer(serializers.Serializer):
     def validate_new_password(self, value):
         validate_password(value)
         return value
+    
+
+class LogoutSerializer(serializers.Serializer):
+    refresh = serializers.CharField()
