@@ -14,7 +14,7 @@ class Vehicle(models.Model):
     price_per_hour = models.PositiveIntegerField()
     price_per_day = models.PositiveIntegerField()
     status = models.CharField(max_length=20,choices=VehicleStatus.choices, default=VehicleStatus.AVAILABLE)
-
+    extra_features = models.JSONField(default=dict, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
