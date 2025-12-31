@@ -5,6 +5,7 @@ from .serializers import (
     RegistrationSerializer,
     PasswordChangeSerializer,
     LogoutSerializer,
+    VendorRegistrationSerializer,
 )
 from accounts.models import User, Profile
 from rest_framework.generics import (
@@ -164,3 +165,28 @@ class LogoutAPIView(generics.GenericAPIView):
             return Response(
                 {"detail": "Invalid refresh token"}, status=status.HTTP_400_BAD_REQUEST
             )
+
+
+class VendorRegistrationAPIView(generics.GenericAPIView):
+    serializer_class = VendorRegistrationSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user = serializer.save()
+
+        refresh = RefreshToken.for_user(user)
+
+        return Response(
+            {
+                "user": {
+                    "id": user.id,
+                    "email": user.email,
+                    "is_vendor": user.is_vendor,
+                },
+                "access": str(refresh.access_token),
+                "refresh": str(refresh),
+            },
+            status=status.HTTP_201_CREATED,
+        )
