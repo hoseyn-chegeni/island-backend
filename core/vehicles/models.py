@@ -3,7 +3,7 @@ from .choices import VehicleType, VehicleStatus
 
 
 class Vehicle(models.Model):
-    vendor = models.ForeignKey("accounts.User",on_delete=models.CASCADE,related_name="vehicles")
+    vendor = models.ForeignKey("accounts.Vendor",on_delete=models.CASCADE,related_name="vehicles")
 
     type = models.CharField( max_length=20,choices=VehicleType.choices)
     brand = models.CharField(max_length=100)
