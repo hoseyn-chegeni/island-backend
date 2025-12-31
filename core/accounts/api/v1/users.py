@@ -40,21 +40,18 @@ class Userlist(ListAPIView):
             openapi.Parameter(
                 "is_active",
                 openapi.IN_QUERY,
-                description="Filter by active status (True or False)",
                 type=openapi.TYPE_BOOLEAN,
             ),
             openapi.Parameter(
                 "search",
                 openapi.IN_QUERY,
-                description="Search by username or email",
                 type=openapi.TYPE_STRING,
             ),
             openapi.Parameter(
                 "ordering",
                 openapi.IN_QUERY,
-                description="Order by field. Use 'date_joined' or '-date_joined' for descending",
                 type=openapi.TYPE_STRING,
-                enum=["date_joined", "-date_joined"],  # Dropdown in Swagger
+                enum=["date_joined", "-date_joined"], 
             ),
         ]
     )
