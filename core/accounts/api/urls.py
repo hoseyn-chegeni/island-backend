@@ -7,7 +7,9 @@ from .v1.users import (
     RegistrationAPIView,
     ChangePasswordAPIView,
     LogoutAPIView,
-    VendorRegistrationAPIView
+    VendorRegistrationAPIView,
+    VendorListAPIView,
+    VendorDetailAPIView,
 )
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -30,4 +32,6 @@ urlpatterns = [
     path("jwt/verify/", TokenVerifyView.as_view()),
     path("password/change/", ChangePasswordAPIView.as_view()),
     path("logout/", LogoutAPIView.as_view()),
+    path("vendors/", VendorListAPIView.as_view()),
+    path("vendors/<int:id>/", VendorDetailAPIView.as_view()),
 ]

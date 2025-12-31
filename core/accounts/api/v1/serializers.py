@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from accounts.models import User, Profile
+from accounts.models import User, Profile, Vendor
 from django.contrib.auth.password_validation import validate_password
 from django.core import exceptions
 
@@ -107,3 +107,19 @@ class VendorRegistrationSerializer(serializers.ModelSerializer):
             is_vendor=True,
         )
         return user
+    
+
+class VendorUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "email", "is_active", "is_vendor"]
+
+
+class VendorSerializer(serializers.ModelSerializer):
+    user = VendorUserSerializer(read_only=True)
+
+    class Meta:
+        model = Vendor
+        fields = "__all__"
+        read_only_fields = ["user", "created_at"]
+        ref_name = "AccountsVendor"

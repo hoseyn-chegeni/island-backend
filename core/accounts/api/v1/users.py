@@ -6,8 +6,9 @@ from .serializers import (
     PasswordChangeSerializer,
     LogoutSerializer,
     VendorRegistrationSerializer,
+    VendorSerializer,
 )
-from accounts.models import User, Profile
+from accounts.models import User, Profile, Vendor
 from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView,
     ListAPIView,
@@ -190,3 +191,14 @@ class VendorRegistrationAPIView(generics.GenericAPIView):
             },
             status=status.HTTP_201_CREATED,
         )
+    
+
+
+class VendorListAPIView(ListAPIView):
+    queryset = Vendor.objects.select_related("user")
+    serializer_class = VendorSerializer
+
+class VendorDetailAPIView(RetrieveUpdateDestroyAPIView):
+    queryset = Vendor.objects.select_related("user")
+    serializer_class = VendorSerializer
+    lookup_field = "id"
