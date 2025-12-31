@@ -1,6 +1,6 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView, DestroyAPIView
-from .serializers import VehicleSerializer,VehicleImageAddSerializer
-from vehicles.models import Vehicle , VehicleImage
+from .serializers import VehicleSerializer,VehicleImageAddSerializer, VehicleLocationSerializer
+from vehicles.models import Vehicle , VehicleImage, VehicleLocation
 from rest_framework.parsers import MultiPartParser, FormParser
 
 class VehicleList(ListCreateAPIView):
@@ -29,3 +29,17 @@ class VehicleImageCreateAPIView(CreateAPIView):
     def perform_create(self, serializer):
         serializer.validated_data.get("vehicle")
         serializer.save()
+
+
+
+
+class VehicleLocationListCreateAPIView(CreateAPIView):
+    queryset = VehicleLocation.objects.all()
+    serializer_class = VehicleLocationSerializer
+
+
+
+class VehicleLocationDetailAPIView(RetrieveUpdateDestroyAPIView):
+    queryset = VehicleLocation.objects.all()
+    serializer_class = VehicleLocationSerializer
+    lookup_field = "id"

@@ -4,14 +4,20 @@ from accounts.models import Vendor
 
 
 class VehicleLocationSerializer(serializers.ModelSerializer):
+    vehicle = serializers.PrimaryKeyRelatedField(queryset=Vehicle.objects.all(),write_only=True)
+
     class Meta:
         model = VehicleLocation
         fields = [
+            "id",
             "name",
+            "manual_address",
+            "vehicle",
             "latitude",
             "longitude",
             "updated_at",
         ]
+        read_only_fields = ["id", "updated_at"]
 
 
 class VehicleImageSerializer(serializers.ModelSerializer):
