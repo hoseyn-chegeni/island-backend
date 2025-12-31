@@ -22,8 +22,6 @@ class Vehicle(models.Model):
         return f"{self.brand} {self.model} - {self.plate_number}"
     
 
-from django.db import models
-
 
 class VehicleImage(models.Model):
     vehicle = models.ForeignKey("vehicles.Vehicle",on_delete=models.CASCADE,related_name="images")
