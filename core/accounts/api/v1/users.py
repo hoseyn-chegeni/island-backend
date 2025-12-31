@@ -27,6 +27,8 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import update_session_auth_hash
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from accounts.choices import VendorStatus,VendorType
+
 
 class Userlist(ListAPIView):
     serializer_class = UserSerializer
@@ -197,6 +199,52 @@ class VendorRegistrationAPIView(generics.GenericAPIView):
 class VendorListAPIView(ListAPIView):
     queryset = Vendor.objects.select_related("user")
     serializer_class = VendorSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ["type","status"]
+    search_fields = ["name", "=user__email"]
+    ordering_fields = ["created_at"]
+    pagination_class = LargeResultSetPagination
+
+
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter(
+                name="type",
+                in_=openapi.IN_QUERY,
+                type=openapi.TYPE_STRING,
+                enum=[choice.value for choice in VendorType],
+            ),
+            openapi.Parameter(
+                name="status",
+                in_=openapi.IN_QUERY,
+                type=openapi.TYPE_STRING,
+                enum=[choice.value for choice in VendorStatus],
+            ),
+            openapi.Parameter(
+                name="search",
+                in_=openapi.IN_QUERY,
+                type=openapi.TYPE_STRING,
+            ),
+            openapi.Parameter(
+                name="ordering",
+                in_=openapi.IN_QUERY,
+                type=openapi.TYPE_STRING,
+                enum=["created_at", "-created_at"],
+            ),
+            openapi.Parameter(
+                name="page",
+                in_=openapi.IN_QUERY,
+                type=openapi.TYPE_INTEGER,
+            ),
+            openapi.Parameter(
+                name="page_size",
+                in_=openapi.IN_QUERY,
+                type=openapi.TYPE_INTEGER,
+            ),
+        ]
+    )
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
 class VendorDetailAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Vendor.objects.select_related("user")
