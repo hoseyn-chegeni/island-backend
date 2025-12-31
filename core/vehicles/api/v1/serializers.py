@@ -1,10 +1,21 @@
 from rest_framework import serializers
-from vehicles.models import Vehicle, VehicleImage
+from vehicles.models import Vehicle, VehicleImage, VehicleLocation
 from accounts.models import Vendor
+
+
+class VehicleLocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VehicleLocation
+        fields = [
+            "name",
+            "latitude",
+            "longitude",
+            "updated_at",
+        ]
+
 
 class VehicleImageSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
-
     class Meta:
         model = VehicleImage
         fields = ["id", "image"]
@@ -24,7 +35,7 @@ class VendorSerializer(serializers.ModelSerializer):
 
 class VehicleSerializer(serializers.ModelSerializer):
     images = VehicleImageSerializer(many=True, read_only=True)
-
+    locations = VehicleLocationSerializer(many=True, read_only=True)
     vendor = serializers.PrimaryKeyRelatedField(queryset=Vendor.objects.all())
 
     class Meta:
@@ -43,3 +54,5 @@ class VehicleImageAddSerializer(serializers.ModelSerializer):
         read_only_fields = ["id", "created_at"]
     
     image = serializers.ImageField()
+
+
