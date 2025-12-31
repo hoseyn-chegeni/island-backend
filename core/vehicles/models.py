@@ -30,3 +30,14 @@ class VehicleImage(models.Model):
 
     def __str__(self):
         return f"Image for Vehicle #{self.vehicle_id}"
+    
+
+
+class VehicleLocation(models.Model):
+    vehicle = models.ForeignKey("vehicles.Vehicle",on_delete=models.CASCADE,related_name="locations")
+    latitude = models.DecimalField(max_digits=9,decimal_places=6)
+    longitude = models.DecimalField(max_digits=9,decimal_places=6)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.vehicle.id} at {self.latitude}, {self.longitude}"
