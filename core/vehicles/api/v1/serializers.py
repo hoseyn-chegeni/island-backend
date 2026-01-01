@@ -1,7 +1,12 @@
 from rest_framework import serializers
 from vehicles.models import Vehicle, VehicleImage, VehicleLocation
 from accounts.models import Vendor
+from rentals.models import VehicleAvailability
 
+class VehicleAvailabilitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VehicleAvailability
+        fields = ['date']
 
 class VehicleLocationSerializer(serializers.ModelSerializer):
     vehicle = serializers.PrimaryKeyRelatedField(queryset=Vehicle.objects.all(),write_only=True)
@@ -43,7 +48,7 @@ class VehicleSerializer(serializers.ModelSerializer):
     images = VehicleImageSerializer(many=True, read_only=True)
     locations = VehicleLocationSerializer(many=True, read_only=True)
     vendor = serializers.PrimaryKeyRelatedField(queryset=Vendor.objects.all())
-
+    unavailable_dates = serializers.SlugRelatedField(many=True,read_only=True,slug_field='date',source='vehicleavailability_set')
     class Meta:
         model = Vehicle
         fields = '__all__'
