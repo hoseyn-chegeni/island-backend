@@ -27,3 +27,29 @@ class VehicleAvailability(models.Model):
     def save(self, *args, **kwargs):
         self.full_clean() # This ensures clean() is called before saving
         super().save(*args, **kwargs)
+    def __str__(self):
+        return f"Rental #{self.date} - Vehicle {self.vehicle.id}"
+
+
+class VehicleRental(models.Model):
+    STATUS_CHOICES = (
+        ("PENDING", "Pending"),
+        ("CONFIRMED", "Confirmed"),
+        ("CANCELLED", "Cancelled"),
+    )
+
+    user = models.ForeignKey("accounts.User", on_delete=models.CASCADE)
+    vehicle = models.ForeignKey("vehicles.Vehicle", on_delete=models.CASCADE)
+
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+
+    total_price = models.PositiveIntegerField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+
+    def __str__(self):
+        return f"Rental #{self.id} - Vehicle {self.vehicle_id}"
