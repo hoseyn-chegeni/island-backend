@@ -36,6 +36,7 @@ class Vehicle(models.Model):
     )
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name="vehicles")
     extra_features = models.JSONField(default=dict, blank=True)
+    is_top = models.BooleanField(default = False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
