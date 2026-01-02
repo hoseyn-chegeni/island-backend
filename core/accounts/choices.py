@@ -5,6 +5,7 @@ class Gender(models.TextChoices):
     MALE = "M", "Male"
     FEMALE = "F", "Female"
 
+
 class VendorType(models.TextChoices):
     INDIVIDUAL = "IND", "Individual"
     COMPANY = "COM", "Company"

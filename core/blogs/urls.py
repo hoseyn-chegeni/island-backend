@@ -1,7 +1,4 @@
 from django.urls import path, include
 
 
-urlpatterns = [
-    path('api/v1/', include('blogs.api.urls'))
-]
-
+urlpatterns = [path("api/v1/", include("blogs.api.urls"))]

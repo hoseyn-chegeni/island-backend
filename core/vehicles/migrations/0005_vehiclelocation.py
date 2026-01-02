@@ -7,18 +7,33 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('vehicles', '0004_vehicle_extra_features_alter_vehicle_type'),
+        ("vehicles", "0004_vehicle_extra_features_alter_vehicle_type"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='VehicleLocation',
+            name="VehicleLocation",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('latitude', models.DecimalField(decimal_places=6, max_digits=9)),
-                ('longitude', models.DecimalField(decimal_places=6, max_digits=9)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('vehicle', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='locations', to='vehicles.vehicle')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("latitude", models.DecimalField(decimal_places=6, max_digits=9)),
+                ("longitude", models.DecimalField(decimal_places=6, max_digits=9)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "vehicle",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="locations",
+                        to="vehicles.vehicle",
+                    ),
+                ),
             ],
         ),
     ]

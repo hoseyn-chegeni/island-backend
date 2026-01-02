@@ -75,9 +75,6 @@ class LogoutSerializer(serializers.Serializer):
     refresh = serializers.CharField()
 
 
-
-
-
 class VendorRegistrationSerializer(serializers.ModelSerializer):
     password1 = serializers.CharField(write_only=True)
 
@@ -87,9 +84,7 @@ class VendorRegistrationSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if attrs["password"] != attrs["password1"]:
-            raise serializers.ValidationError(
-                {"detail": "Passwords do not match"}
-            )
+            raise serializers.ValidationError({"detail": "Passwords do not match"})
 
         try:
             validate_password(attrs["password"])
@@ -107,7 +102,7 @@ class VendorRegistrationSerializer(serializers.ModelSerializer):
             is_vendor=True,
         )
         return user
-    
+
 
 class VendorUserSerializer(serializers.ModelSerializer):
     class Meta:

@@ -6,18 +6,31 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('vehicles', '0003_alter_vehicle_vendor'),
+        ("vehicles", "0003_alter_vehicle_vendor"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='vehicle',
-            name='extra_features',
+            model_name="vehicle",
+            name="extra_features",
             field=models.JSONField(blank=True, default=dict),
         ),
         migrations.AlterField(
-            model_name='vehicle',
-            name='type',
-            field=models.CharField(choices=[('CAR', 'Car'), ('SCOOTER', 'Scooter'), ('MOTORBIKE', 'Motorbike'), ('BICYCLE', 'Bicycle'), ('ATV_QUAD', 'ATV / Quad'), ('BUGGY', 'Dune Buggy'), ('JET_SKI', 'Jet Ski'), ('BOAT', 'Motor Boat'), ('KAYAK', 'Kayak / Canoe')], max_length=20),
+            model_name="vehicle",
+            name="type",
+            field=models.CharField(
+                choices=[
+                    ("CAR", "Car"),
+                    ("SCOOTER", "Scooter"),
+                    ("MOTORBIKE", "Motorbike"),
+                    ("BICYCLE", "Bicycle"),
+                    ("ATV_QUAD", "ATV / Quad"),
+                    ("BUGGY", "Dune Buggy"),
+                    ("JET_SKI", "Jet Ski"),
+                    ("BOAT", "Motor Boat"),
+                    ("KAYAK", "Kayak / Canoe"),
+                ],
+                max_length=20,
+            ),
         ),
     ]

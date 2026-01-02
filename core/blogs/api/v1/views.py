@@ -4,7 +4,8 @@ from blogs.models import Post, Category, Tag
 
 
 # POSTS
-#TODO:fix add image issue
+# TODO:fix add image issue
+
 
 class PostList(ListCreateAPIView):
     serializer_class = PostSerializer

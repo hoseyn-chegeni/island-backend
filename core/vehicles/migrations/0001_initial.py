@@ -15,21 +15,57 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Vehicle',
+            name="Vehicle",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('type', models.CharField(choices=[('CAR', 'Car'), ('MOTORCYCLE', 'Motorcycle'), ('VAN', 'Van')], max_length=20)),
-                ('brand', models.CharField(max_length=100)),
-                ('model', models.CharField(max_length=100)),
-                ('year', models.PositiveIntegerField()),
-                ('color', models.CharField(max_length=200)),
-                ('plate_number', models.CharField(max_length=20, unique=True)),
-                ('price_per_hour', models.PositiveIntegerField()),
-                ('price_per_day', models.PositiveIntegerField()),
-                ('status', models.CharField(choices=[('AVAILABLE', 'Available'), ('RENTED', 'Rented'), ('MAINTENANCE', 'Maintenance')], default='AVAILABLE', max_length=20)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('vendor', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='vehicles', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "type",
+                    models.CharField(
+                        choices=[
+                            ("CAR", "Car"),
+                            ("MOTORCYCLE", "Motorcycle"),
+                            ("VAN", "Van"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
+                ("brand", models.CharField(max_length=100)),
+                ("model", models.CharField(max_length=100)),
+                ("year", models.PositiveIntegerField()),
+                ("color", models.CharField(max_length=200)),
+                ("plate_number", models.CharField(max_length=20, unique=True)),
+                ("price_per_hour", models.PositiveIntegerField()),
+                ("price_per_day", models.PositiveIntegerField()),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("AVAILABLE", "Available"),
+                            ("RENTED", "Rented"),
+                            ("MAINTENANCE", "Maintenance"),
+                        ],
+                        default="AVAILABLE",
+                        max_length=20,
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "vendor",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="vehicles",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

@@ -9,19 +9,33 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('vehicles', '0007_vehiclelocation_manual_address'),
+        ("vehicles", "0007_vehiclelocation_manual_address"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='VehicleAvailability',
+            name="VehicleAvailability",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField()),
-                ('vehicle', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='vehicles.vehicle')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("date", models.DateField()),
+                (
+                    "vehicle",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="vehicles.vehicle",
+                    ),
+                ),
             ],
             options={
-                'unique_together': {('vehicle', 'date')},
+                "unique_together": {("vehicle", "date")},
             },
         ),
     ]

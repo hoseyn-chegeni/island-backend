@@ -27,7 +27,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import update_session_auth_hash
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-from accounts.choices import VendorStatus,VendorType
+from accounts.choices import VendorStatus, VendorType
 
 
 class Userlist(ListAPIView):
@@ -55,7 +55,7 @@ class Userlist(ListAPIView):
                 "ordering",
                 openapi.IN_QUERY,
                 type=openapi.TYPE_STRING,
-                enum=["date_joined", "-date_joined"], 
+                enum=["date_joined", "-date_joined"],
             ),
         ]
     )
@@ -193,18 +193,16 @@ class VendorRegistrationAPIView(generics.GenericAPIView):
             },
             status=status.HTTP_201_CREATED,
         )
-    
 
 
 class VendorListAPIView(ListAPIView):
     queryset = Vendor.objects.select_related("user")
     serializer_class = VendorSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = ["type","status"]
+    filterset_fields = ["type", "status"]
     search_fields = ["name", "=user__email"]
     ordering_fields = ["created_at"]
     pagination_class = LargeResultSetPagination
-
 
     @swagger_auto_schema(
         manual_parameters=[
@@ -245,6 +243,7 @@ class VendorListAPIView(ListAPIView):
     )
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
+
 
 class VendorDetailAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Vendor.objects.select_related("user")

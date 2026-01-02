@@ -9,12 +9,11 @@ class VehicleType(models.TextChoices):
     BICYCLE = "BICYCLE", "Bicycle"
     ATV_QUAD = "ATV_QUAD", "ATV / Quad"
     BUGGY = "BUGGY", "Dune Buggy"
-    
+
     # Water Vehicles
     JET_SKI = "JET_SKI", "Jet Ski"
     BOAT = "BOAT", "Motor Boat"
     KAYAK = "KAYAK", "Kayak / Canoe"
-    
 
 
 class VehicleStatus(models.TextChoices):

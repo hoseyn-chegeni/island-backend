@@ -3,13 +3,17 @@ from vehicles.models import Vehicle, VehicleImage, VehicleLocation
 from accounts.models import Vendor
 from rentals.models import VehicleAvailability
 
+
 class VehicleAvailabilitySerializer(serializers.ModelSerializer):
     class Meta:
         model = VehicleAvailability
-        fields = ['date']
+        fields = ["date"]
+
 
 class VehicleLocationSerializer(serializers.ModelSerializer):
-    vehicle = serializers.PrimaryKeyRelatedField(queryset=Vehicle.objects.all(),write_only=True)
+    vehicle = serializers.PrimaryKeyRelatedField(
+        queryset=Vehicle.objects.all(), write_only=True
+    )
 
     class Meta:
         model = VehicleLocation
@@ -27,6 +31,7 @@ class VehicleLocationSerializer(serializers.ModelSerializer):
 
 class VehicleImageSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
+
     class Meta:
         model = VehicleImage
         fields = ["id", "image"]
@@ -37,33 +42,37 @@ class VehicleImageSerializer(serializers.ModelSerializer):
             return request.build_absolute_uri(obj.image.url)
         return None
 
+
 class VendorSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(source='user.email', read_only=True)
+    email = serializers.EmailField(source="user.email", read_only=True)
 
     class Meta:
         model = Vendor
         fields = ["id", "name", "email", "type", "status"]
 
+
 class VehicleSerializer(serializers.ModelSerializer):
     images = VehicleImageSerializer(many=True, read_only=True)
     locations = VehicleLocationSerializer(many=True, read_only=True)
     vendor = serializers.PrimaryKeyRelatedField(queryset=Vendor.objects.all())
-    unavailable_dates = serializers.SlugRelatedField(many=True,read_only=True,slug_field='date',source='vehicleavailability_set')
+    unavailable_dates = serializers.SlugRelatedField(
+        many=True, read_only=True, slug_field="date", source="vehicleavailability_set"
+    )
+
     class Meta:
         model = Vehicle
-        fields = '__all__'
+        fields = "__all__"
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['vendor'] = VendorSerializer(instance.vendor).data
+        representation["vendor"] = VendorSerializer(instance.vendor).data
         return representation
+
 
 class VehicleImageAddSerializer(serializers.ModelSerializer):
     class Meta:
         model = VehicleImage
         fields = ["id", "vehicle", "image", "created_at"]
         read_only_fields = ["id", "created_at"]
-    
+
     image = serializers.ImageField()
-
-
