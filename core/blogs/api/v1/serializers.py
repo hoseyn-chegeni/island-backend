@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from blogs.models import Category, Tag, Post
-
+from rest_framework.parsers import MultiPartParser, FormParser
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,7 +14,6 @@ class TagSerializer(serializers.ModelSerializer):
         fields = ["id", "name"]
 
 
-# TODO:fix add image issue
 class PostSerializer(serializers.ModelSerializer):
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
     tags = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True)

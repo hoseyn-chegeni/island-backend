@@ -1,15 +1,16 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from .serializers import PostSerializer, TagSerializer, CategorySerializer
 from blogs.models import Post, Category, Tag
+from rest_framework.parsers import MultiPartParser, FormParser
+
 
 
 # POSTS
-# TODO:fix add image issue
-
-
 class PostList(ListCreateAPIView):
     serializer_class = PostSerializer
     queryset = Post.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
+
 
 
 class PostDetail(RetrieveUpdateDestroyAPIView):
