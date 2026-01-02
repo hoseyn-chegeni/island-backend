@@ -8,8 +8,10 @@ from .serializers import (
     VehicleSerializer,
     VehicleImageAddSerializer,
     VehicleLocationSerializer,
+    VehicleBrandSerializer,
+    VehicleCategorySerializer,
 )
-from vehicles.models import Vehicle, VehicleImage, VehicleLocation
+from vehicles.models import Vehicle, VehicleImage, VehicleLocation,Category,Brand
 from rest_framework.parsers import MultiPartParser, FormParser
 
 
@@ -47,4 +49,29 @@ class VehicleLocationListCreateAPIView(CreateAPIView):
 class VehicleLocationDetailAPIView(RetrieveUpdateDestroyAPIView):
     queryset = VehicleLocation.objects.all()
     serializer_class = VehicleLocationSerializer
+    lookup_field = "id"
+
+
+
+
+class VehicleBrandList(ListCreateAPIView):
+    serializer_class = VehicleBrandSerializer
+    queryset = Brand.objects.all()
+
+
+class VehicleBrandDetail(RetrieveUpdateDestroyAPIView):
+    serializer_class = VehicleBrandSerializer
+    queryset = Brand.objects.all()
+    lookup_field = "id"
+
+
+
+class VehicleCategoryList(ListCreateAPIView):
+    serializer_class = VehicleCategorySerializer
+    queryset = Category.objects.all()
+
+
+class VehicleCategoryDetail(RetrieveUpdateDestroyAPIView):
+    serializer_class = VehicleCategorySerializer
+    queryset = Category.objects.all()
     lookup_field = "id"

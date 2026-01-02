@@ -6,6 +6,10 @@ from .v1.views import (
     VehicleImageCreateAPIView,
     VehicleLocationDetailAPIView,
     VehicleLocationListCreateAPIView,
+    VehicleBrandDetail,
+    VehicleCategoryDetail,
+    VehicleCategoryList,
+    VehicleBrandList
 )
 
 
@@ -16,4 +20,8 @@ urlpatterns = [
     path("images/add/", VehicleImageCreateAPIView.as_view()),
     path("location/", VehicleLocationListCreateAPIView.as_view()),
     path("location/<int:id>", VehicleLocationDetailAPIView.as_view()),
+    path("brand/", VehicleBrandList.as_view()),
+    path("brand/<int:id>/", VehicleBrandDetail.as_view()),
+    path("category/", VehicleCategoryList.as_view()),
+    path("category/<int:id>/", VehicleCategoryDetail.as_view()),
 ]
