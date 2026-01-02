@@ -11,8 +11,8 @@ def get_date_range(start_date, end_date):
 
 @receiver(pre_save, sender=VehicleRental)
 def check_vehicle_availability(sender, instance, **kwargs):
-    start_date = instance.start_time
-    end_date = instance.end_time
+    start_date = instance.start_time.date()
+    end_date = instance.end_time.date()
 
     dates_to_check = get_date_range(start_date, end_date)
 
@@ -30,8 +30,8 @@ def check_vehicle_availability(sender, instance, **kwargs):
 @receiver(post_save, sender=VehicleRental)
 def block_availability_dates(sender, instance, created, **kwargs):
     if created:
-        start_date = instance.start_time
-        end_date = instance.end_time
+        start_date = instance.start_time.date()
+        end_date = instance.end_time.date()
         dates_to_block = get_date_range(start_date, end_date)
 
         availability_objects = [

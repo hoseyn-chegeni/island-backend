@@ -17,8 +17,8 @@ class VehicleRentalSerializer(serializers.ModelSerializer):
         read_only_fields = ["total_price", "status", "created_at"]
 
     def validate(self, data):
-        start_time = data.get("start_time")
-        end_time = data.get("end_time")
+        start_time = data.get("start_time").date()
+        end_time = data.get("end_time").date()
         vehicle = data.get("vehicle")
 
         if start_time >= end_time:

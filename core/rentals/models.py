@@ -41,8 +41,8 @@ class VehicleRental(models.Model):
     user = models.ForeignKey("accounts.User", on_delete=models.CASCADE)
     vehicle = models.ForeignKey("vehicles.Vehicle", on_delete=models.CASCADE)
 
-    start_time = models.DateField()
-    end_time = models.DateField()
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
 
     total_price = models.PositiveIntegerField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES)
