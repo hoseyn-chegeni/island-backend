@@ -9,7 +9,7 @@ from .v1.views import (
     VehicleBrandDetail,
     VehicleCategoryDetail,
     VehicleCategoryList,
-    VehicleBrandList
+    VehicleBrandList,
 )
 
 

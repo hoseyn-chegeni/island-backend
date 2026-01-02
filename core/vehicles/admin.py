@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Vehicle, VehicleImage, VehicleLocation, Category,Brand
+from .models import Vehicle, VehicleImage, VehicleLocation, Category, Brand
 
 # Register your models here.
 

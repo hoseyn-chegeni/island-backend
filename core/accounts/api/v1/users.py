@@ -16,7 +16,7 @@ from rest_framework.generics import (
 )
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
-from .pagination import LargeResultSetPagination
+from core.utils import LargeResultSetPagination
 from django.db.models.functions import Concat
 from django.db.models import Value
 from rest_framework import generics

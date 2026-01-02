@@ -2,7 +2,6 @@ from django.db import models
 from .choices import VehicleType, VehicleStatus
 
 
-
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True, null=True)
@@ -34,9 +33,11 @@ class Vehicle(models.Model):
     status = models.CharField(
         max_length=20, choices=VehicleStatus.choices, default=VehicleStatus.AVAILABLE
     )
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name="vehicles")
+    category = models.ForeignKey(
+        Category, on_delete=models.SET_NULL, null=True, related_name="vehicles"
+    )
     extra_features = models.JSONField(default=dict, blank=True)
-    is_top = models.BooleanField(default = False)
+    is_top = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

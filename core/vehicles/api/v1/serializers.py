@@ -7,12 +7,13 @@ from rentals.models import VehicleAvailability
 class VehicleCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = '__all__'
+        fields = "__all__"
+
 
 class VehicleBrandSerializer(serializers.ModelSerializer):
     class Meta:
         model = Brand
-        fields = '__all__'
+        fields = "__all__"
 
 
 class VehicleAvailabilitySerializer(serializers.ModelSerializer):
@@ -65,7 +66,7 @@ class VendorSerializer(serializers.ModelSerializer):
 class VehicleSerializer(serializers.ModelSerializer):
     images = VehicleImageSerializer(many=True, read_only=True)
     locations = VehicleLocationSerializer(many=True, read_only=True)
-    category= serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
     brand = serializers.PrimaryKeyRelatedField(queryset=Brand.objects.all())
 
     vendor = serializers.PrimaryKeyRelatedField(queryset=Vendor.objects.all())
@@ -76,7 +77,6 @@ class VehicleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vehicle
         fields = "__all__"
-
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
