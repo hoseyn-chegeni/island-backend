@@ -1,5 +1,7 @@
 from django.urls import path, include
 
 
-urlpatterns = []
+urlpatterns = [
+    path('api/v1/', include('blogs.api.urls'))
+]
 
