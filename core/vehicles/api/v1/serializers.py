@@ -1,7 +1,18 @@
 from rest_framework import serializers
-from vehicles.models import Vehicle, VehicleImage, VehicleLocation
+from vehicles.models import Vehicle, VehicleImage, VehicleLocation, Category, Brand
 from accounts.models import Vendor
 from rentals.models import VehicleAvailability
+
+
+class VehicleCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+class VehicleBrandSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Brand
+        fields = '__all__'
 
 
 class VehicleAvailabilitySerializer(serializers.ModelSerializer):
@@ -54,6 +65,9 @@ class VendorSerializer(serializers.ModelSerializer):
 class VehicleSerializer(serializers.ModelSerializer):
     images = VehicleImageSerializer(many=True, read_only=True)
     locations = VehicleLocationSerializer(many=True, read_only=True)
+    category= serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
+    brand = serializers.PrimaryKeyRelatedField(queryset=Brand.objects.all())
+
     vendor = serializers.PrimaryKeyRelatedField(queryset=Vendor.objects.all())
     unavailable_dates = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="date", source="vehicleavailability_set"
@@ -63,9 +77,12 @@ class VehicleSerializer(serializers.ModelSerializer):
         model = Vehicle
         fields = "__all__"
 
+
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation["vendor"] = VendorSerializer(instance.vendor).data
+        representation["category"] = VehicleCategorySerializer(instance.category).data
+        representation["brand"] = VehicleBrandSerializer(instance.brand).data
         return representation
 
 

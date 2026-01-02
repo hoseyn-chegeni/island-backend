@@ -2,13 +2,29 @@ from django.db import models
 from .choices import VehicleType, VehicleStatus
 
 
+
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Brand(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Vehicle(models.Model):
     vendor = models.ForeignKey(
         "accounts.Vendor", on_delete=models.CASCADE, related_name="vehicles"
     )
 
     type = models.CharField(max_length=20, choices=VehicleType.choices)
-    brand = models.CharField(max_length=100)
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name="vehicles")
     model = models.CharField(max_length=100)
     year = models.PositiveIntegerField()
     color = models.CharField(max_length=200)
@@ -18,6 +34,7 @@ class Vehicle(models.Model):
     status = models.CharField(
         max_length=20, choices=VehicleStatus.choices, default=VehicleStatus.AVAILABLE
     )
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name="vehicles")
     extra_features = models.JSONField(default=dict, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
