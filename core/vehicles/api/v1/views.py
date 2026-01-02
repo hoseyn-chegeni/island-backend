@@ -18,11 +18,6 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from core.utils import LargeResultSetPagination
 from rest_framework.parsers import MultiPartParser, FormParser
 
-    
-
-
-
-
 
 class VehicleList(ListCreateAPIView):
     serializer_class = VehicleSerializer

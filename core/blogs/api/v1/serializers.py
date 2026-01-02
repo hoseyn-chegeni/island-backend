@@ -2,6 +2,7 @@ from rest_framework import serializers
 from blogs.models import Category, Tag, Post
 from rest_framework.parsers import MultiPartParser, FormParser
 
+
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
