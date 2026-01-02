@@ -16,11 +16,18 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from core.utils import LargeResultSetPagination
+from rest_framework.parsers import MultiPartParser, FormParser
+
+    
+
+
+
 
 
 class VehicleList(ListCreateAPIView):
     serializer_class = VehicleSerializer
     queryset = Vehicle.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = [
         "vendor__user__email",

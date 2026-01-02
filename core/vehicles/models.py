@@ -38,6 +38,7 @@ class Vehicle(models.Model):
     )
     extra_features = models.JSONField(default=dict, blank=True)
     is_top = models.BooleanField(default=False)
+    primary_image = models.ImageField(upload_to="vehicle_primary_images/", blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
