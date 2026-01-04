@@ -28,7 +28,9 @@ from django.contrib.auth import update_session_auth_hash
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from accounts.choices import VendorStatus, VendorType
-from core.utils import IsOwnerOrAdmin
+from core.utils import IsOwnerOrAdmin, CustomUserRateThrottle,CustomAnonRateThrottle
+
+
 
 class Userlist(ListAPIView):
     serializer_class = UserSerializer
@@ -39,6 +41,7 @@ class Userlist(ListAPIView):
     ordering_fields = ["date_joined"]
     pagination_class = LargeResultSetPagination
     permission_classes = [IsAuthenticated]
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]
     @swagger_auto_schema(
         manual_parameters=[
             openapi.Parameter(
@@ -68,12 +71,15 @@ class UserDetail(RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     lookup_field = "id"
     permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]
+
 
 class ProfileList(ListAPIView):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     permission_classes = [IsAuthenticated]
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]
     filterset_fields = [
         "gender",
     ]
@@ -103,12 +109,13 @@ class ProfileDetail(RetrieveUpdateAPIView):
     queryset = Profile.objects.all()
     lookup_field = "id"
     permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]
 
 
 # TODO: Switch to phone number and OTP registration
 class RegistrationAPIView(generics.GenericAPIView):
     serializer_class = RegistrationSerializer
-
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]
     def post(self, request, *args, **kwargs):
         serializer = RegistrationSerializer(data=request.data)
         if serializer.is_valid():
@@ -129,7 +136,7 @@ class ChangePasswordAPIView(generics.UpdateAPIView):
     serializer_class = PasswordChangeSerializer
     model = User
     permission_classes = [IsAuthenticated]
-
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]
     def get_object(self, queryset=None):
         return self.request.user
 
@@ -155,7 +162,7 @@ class ChangePasswordAPIView(generics.UpdateAPIView):
 class LogoutAPIView(generics.GenericAPIView):
     serializer_class = LogoutSerializer
     permission_classes = [IsAuthenticated]
-
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -174,7 +181,7 @@ class LogoutAPIView(generics.GenericAPIView):
 
 class VendorRegistrationAPIView(generics.GenericAPIView):
     serializer_class = VendorRegistrationSerializer
-
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -206,6 +213,7 @@ class VendorListAPIView(ListAPIView):
     ordering_fields = ["created_at"]
     pagination_class = LargeResultSetPagination
     permission_classes = [IsAuthenticated]
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]
     @swagger_auto_schema(
         manual_parameters=[
             openapi.Parameter(
@@ -252,3 +260,4 @@ class VendorDetailAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = VendorSerializer
     lookup_field = "id"
     permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]

@@ -1,6 +1,6 @@
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import BasePermission,  SAFE_METHODS
-
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 
 #-----PAGINATION-----
 class LargeResultSetPagination(PageNumberPagination):
@@ -26,3 +26,12 @@ class IsAdminOrReadOnly(BasePermission):
         if request.method in SAFE_METHODS:
             return True
         return request.user and request.user.is_staff
+    
+
+
+# -----throttle-----
+class CustomUserRateThrottle(UserRateThrottle):
+    rate = '30/min' 
+
+class CustomAnonRateThrottle(AnonRateThrottle):
+    rate = '20/min' 

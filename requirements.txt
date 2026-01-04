@@ -7,3 +7,4 @@ drf-yasg[validation]
 pillow
 djangorestframework_simplejwt
 django-environ
+djangorestframework-ratelimit

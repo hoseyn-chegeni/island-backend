@@ -15,7 +15,7 @@ from vehicles.models import Vehicle, VehicleImage, VehicleLocation, Category, Br
 from rest_framework.parsers import MultiPartParser, FormParser
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
-from core.utils import LargeResultSetPagination
+from core.utils import LargeResultSetPagination,CustomUserRateThrottle,CustomAnonRateThrottle
 from rest_framework.parsers import MultiPartParser, FormParser
 
 
@@ -24,6 +24,7 @@ class VehicleList(ListCreateAPIView):
     queryset = Vehicle.objects.all()
     parser_classes = (MultiPartParser, FormParser)
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]
     filterset_fields = [
         "vendor__user__email",
         "type",
@@ -42,18 +43,18 @@ class VehicleDetail(RetrieveUpdateDestroyAPIView):
     serializer_class = VehicleSerializer
     queryset = Vehicle.objects.all()
     lookup_field = "id"
-
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]
 
 class VehicleImageDeleteAPIView(DestroyAPIView):
     queryset = VehicleImage.objects.all()
     lookup_field = "id"
-
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]
 
 class VehicleImageCreateAPIView(CreateAPIView):
     queryset = VehicleImage.objects.all()
     serializer_class = VehicleImageAddSerializer
     parser_classes = [MultiPartParser, FormParser]
-
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]
     def perform_create(self, serializer):
         serializer.validated_data.get("vehicle")
         serializer.save()
@@ -62,31 +63,32 @@ class VehicleImageCreateAPIView(CreateAPIView):
 class VehicleLocationListCreateAPIView(CreateAPIView):
     queryset = VehicleLocation.objects.all()
     serializer_class = VehicleLocationSerializer
-
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]
 
 class VehicleLocationDetailAPIView(RetrieveUpdateDestroyAPIView):
     queryset = VehicleLocation.objects.all()
     serializer_class = VehicleLocationSerializer
     lookup_field = "id"
-
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]
 
 class VehicleBrandList(ListCreateAPIView):
     serializer_class = VehicleBrandSerializer
     queryset = Brand.objects.all()
-
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]
 
 class VehicleBrandDetail(RetrieveUpdateDestroyAPIView):
     serializer_class = VehicleBrandSerializer
     queryset = Brand.objects.all()
     lookup_field = "id"
-
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]
 
 class VehicleCategoryList(ListCreateAPIView):
     serializer_class = VehicleCategorySerializer
     queryset = Category.objects.all()
-
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]
 
 class VehicleCategoryDetail(RetrieveUpdateDestroyAPIView):
     serializer_class = VehicleCategorySerializer
     queryset = Category.objects.all()
     lookup_field = "id"
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]

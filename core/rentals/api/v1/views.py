@@ -2,7 +2,7 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 from .serializers import VehicleRentalSerializer
 from ...models import VehicleRental
 from rest_framework.permissions import IsAuthenticated
-from core.utils import IsOwnerOrAdmin
+from core.utils import IsOwnerOrAdmin, CustomAnonRateThrottle,CustomUserRateThrottle
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.response import Response
 
@@ -11,13 +11,13 @@ class VehicleRentalListCreateAPIView(ListCreateAPIView):
     queryset = VehicleRental.objects.all()
     serializer_class = VehicleRentalSerializer
     permission_classes = [IsAuthenticated,]
-
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]
 class VehicleRentalDetailAPIView(RetrieveUpdateDestroyAPIView):
     queryset = VehicleRental.objects.all()
     serializer_class = VehicleRentalSerializer
     lookup_field = "id"
     permission_classes = [IsOwnerOrAdmin,]
-
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]
 
 
 
@@ -25,7 +25,7 @@ class MyRentHistoryAPIView(ListAPIView):
     serializer_class = VehicleRentalSerializer
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
-
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]
     def get_queryset(self):
 
         user_id = self.request.user.id  # Get the user id from the JWT
