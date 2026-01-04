@@ -28,7 +28,7 @@ from django.contrib.auth import update_session_auth_hash
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from accounts.choices import VendorStatus, VendorType
-from .permissions import IsOwnerOrAdmin
+from core.utils import IsOwnerOrAdmin
 
 class Userlist(ListAPIView):
     serializer_class = UserSerializer
