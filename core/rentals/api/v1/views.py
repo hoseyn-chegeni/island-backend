@@ -1,7 +1,7 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
 from .serializers import VehicleRentalSerializer
 from ...models import VehicleRental
-from rest_framework.permissions import IsAdminUser,IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from core.utils import IsOwnerOrAdmin
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.response import Response
@@ -10,7 +10,7 @@ from rest_framework.response import Response
 class VehicleRentalListCreateAPIView(ListCreateAPIView):
     queryset = VehicleRental.objects.all()
     serializer_class = VehicleRentalSerializer
-    permission_classes = [IsAdminUser,]
+    permission_classes = [IsAuthenticated,]
 
 class VehicleRentalDetailAPIView(RetrieveUpdateDestroyAPIView):
     queryset = VehicleRental.objects.all()

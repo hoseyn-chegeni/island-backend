@@ -42,6 +42,10 @@ class VehicleRentalSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "One or more dates in your selection are already booked."
             )
+        
+        user = self.context["request"].user 
+        if user.is_vendor:
+            raise serializers.ValidationError("Vendors cannot rent cars.")
 
         return data
 
