@@ -28,7 +28,7 @@ from django.contrib.auth import update_session_auth_hash
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from accounts.choices import VendorStatus, VendorType
-
+from .permissions import IsOwnerOrAdmin
 
 class Userlist(ListAPIView):
     serializer_class = UserSerializer
@@ -38,7 +38,7 @@ class Userlist(ListAPIView):
     search_fields = ["=username", "email"]
     ordering_fields = ["date_joined"]
     pagination_class = LargeResultSetPagination
-
+    permission_classes = [IsAuthenticated]
     @swagger_auto_schema(
         manual_parameters=[
             openapi.Parameter(
@@ -67,12 +67,13 @@ class UserDetail(RetrieveUpdateDestroyAPIView):
     serializer_class = UserReadUpdateSerializer
     queryset = User.objects.all()
     lookup_field = "id"
-
+    permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
 
 class ProfileList(ListAPIView):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    permission_classes = [IsAuthenticated]
     filterset_fields = [
         "gender",
     ]
@@ -101,6 +102,7 @@ class ProfileDetail(RetrieveUpdateAPIView):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
     lookup_field = "id"
+    permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
 
 
 # TODO: Switch to phone number and OTP registration
@@ -203,7 +205,7 @@ class VendorListAPIView(ListAPIView):
     search_fields = ["name", "=user__email"]
     ordering_fields = ["created_at"]
     pagination_class = LargeResultSetPagination
-
+    permission_classes = [IsAuthenticated]
     @swagger_auto_schema(
         manual_parameters=[
             openapi.Parameter(
@@ -249,3 +251,4 @@ class VendorDetailAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Vendor.objects.select_related("user")
     serializer_class = VendorSerializer
     lookup_field = "id"
+    permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
