@@ -10,12 +10,11 @@ from .v1.users import (
     VendorRegistrationAPIView,
     VendorListAPIView,
     VendorDetailAPIView,
+    CustomTokenObtainPairView,
+    CustomTokenRefreshView,
+    CustomTokenVerifyView
 )
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-    TokenVerifyView,
-)
+
 
 
 app_name = "api_v1"
@@ -27,9 +26,9 @@ urlpatterns = [
     path("profiles/<int:id>/", ProfileDetail.as_view()),
     path("register/", RegistrationAPIView.as_view()),
     path("register/vendor/", VendorRegistrationAPIView.as_view()),
-    path("login/", TokenObtainPairView.as_view()),
-    path("jwt/refresh/", TokenRefreshView.as_view()),
-    path("jwt/verify/", TokenVerifyView.as_view()),
+    path("login/", CustomTokenObtainPairView.as_view()),
+    path("jwt/refresh/", CustomTokenRefreshView.as_view()),
+    path("jwt/verify/", CustomTokenVerifyView.as_view()),
     path("password/change/", ChangePasswordAPIView.as_view()),
     path("logout/", LogoutAPIView.as_view()),
     path("vendors/", VendorListAPIView.as_view()),

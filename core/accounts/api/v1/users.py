@@ -29,6 +29,11 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from accounts.choices import VendorStatus, VendorType
 from core.utils import IsOwnerOrAdmin, CustomUserRateThrottle,CustomAnonRateThrottle
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
 
 
 
@@ -260,4 +265,18 @@ class VendorDetailAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = VendorSerializer
     lookup_field = "id"
     permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]
+
+
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]
+
+
+class CustomTokenRefreshView(TokenRefreshView):
+    throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]
+
+
+class CustomTokenVerifyView(TokenVerifyView):
     throttle_classes =[ CustomUserRateThrottle,CustomAnonRateThrottle]
