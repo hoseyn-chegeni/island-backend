@@ -12,9 +12,8 @@ from .v1.users import (
     VendorDetailAPIView,
     CustomTokenObtainPairView,
     CustomTokenRefreshView,
-    CustomTokenVerifyView
+    CustomTokenVerifyView,
 )
-
 
 
 app_name = "api_v1"
