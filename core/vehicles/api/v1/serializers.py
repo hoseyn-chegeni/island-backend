@@ -103,7 +103,26 @@ class VehicleImageAddSerializer(serializers.ModelSerializer):
     image = serializers.ImageField()
 
 
+
 class VehicleReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = VehicleReview
-        fields = ['id', 'vehicle', 'user', 'score', 'content', 'created_at', 'updated_at']  # Include 'id' field
+        fields = ['id', 'vehicle', 'user', 'score', 'content', 'created_at', 'updated_at']
+
+    def validate(self, data):
+        """
+        Ensure that the user has rented the vehicle before submitting a review.
+        """
+        user = data.get('user')  # Get the user submitting the review
+        vehicle = data.get('vehicle')  # Get the vehicle being reviewed
+
+        # Check if the user has rented the vehicle and the rental status is 'CONFIRMED'
+        rental_exists = VehicleRental.objects.filter(
+            user=user,
+            vehicle=vehicle
+        ).exists()
+
+        if not rental_exists:
+            raise serializers.ValidationError("You can only leave a review for a vehicle you have rented.")
+
+        return data

@@ -22,7 +22,8 @@ from core.utils import (
     CustomAnonRateThrottle,
 )
 from rest_framework.parsers import MultiPartParser, FormParser
-
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 class VehicleList(ListCreateAPIView):
     serializer_class = VehicleSerializer
@@ -116,6 +117,27 @@ class VehicleReviewList(ListCreateAPIView):
     filterset_fields = ['vehicle'] 
     ordering_fields = ['score']  
     pagination_class = LargeResultSetPagination 
+
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter(
+                'vehicle_id',  # Filter parameter for vehicle ID
+                openapi.IN_QUERY,
+                type=openapi.TYPE_INTEGER,
+                description='Filter reviews by vehicle ID'
+            ),
+            openapi.Parameter(
+                'ordering',  # Ordering parameter for score
+                openapi.IN_QUERY,
+                type=openapi.TYPE_STRING,
+                enum=["score", "-score"],  # Possible ordering options
+                description='Order reviews by score (ascending or descending)'
+            ),
+        ]
+    )
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
 
 
 class VehicleReviewDetail(RetrieveUpdateDestroyAPIView):
