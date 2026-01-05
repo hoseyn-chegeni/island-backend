@@ -112,7 +112,10 @@ class VehicleCategoryDetail(RetrieveUpdateDestroyAPIView):
 class VehicleReviewList(ListCreateAPIView):
     serializer_class = VehicleReviewSerializer
     queryset = VehicleReview.objects.all()
-
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_fields = ['vehicle'] 
+    ordering_fields = ['score']  
+    pagination_class = LargeResultSetPagination 
 
 
 class VehicleReviewDetail(RetrieveUpdateDestroyAPIView):
