@@ -43,27 +43,50 @@ class VehicleList(ListCreateAPIView):
     search_fields = ["brand", "model", "=plate_number"]
     ordering_fields = ["created_at"]
     pagination_class = LargeResultSetPagination
-
+    @swagger_auto_schema(tags=["Vehicles"])
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+    @swagger_auto_schema(tags=["Vehicles"])
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
 
 class VehicleDetail(RetrieveUpdateDestroyAPIView):
     serializer_class = VehicleSerializer
     queryset = Vehicle.objects.all()
     lookup_field = "id"
     throttle_classes = [CustomUserRateThrottle, CustomAnonRateThrottle]
-
+    @swagger_auto_schema(tags=["Vehicles"])
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+    @swagger_auto_schema(tags=["Vehicles"])
+    def put(self, request, *args, **kwargs):
+        return super().put(request, *args, **kwargs)
+    
+    @swagger_auto_schema(tags=["Vehicles"])
+    def patch(self, request, *args, **kwargs):
+        return super().patch(request, *args, **kwargs)
+    @swagger_auto_schema(tags=["Vehicles"])
+    def delete(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
 
 class VehicleImageDeleteAPIView(DestroyAPIView):
     queryset = VehicleImage.objects.all()
     lookup_field = "id"
     throttle_classes = [CustomUserRateThrottle, CustomAnonRateThrottle]
-
+    @swagger_auto_schema(tags=["Vehicle-Images"])
+    def delete(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
+    
 
 class VehicleImageCreateAPIView(CreateAPIView):
     queryset = VehicleImage.objects.all()
     serializer_class = VehicleImageAddSerializer
     parser_classes = [MultiPartParser, FormParser]
     throttle_classes = [CustomUserRateThrottle, CustomAnonRateThrottle]
-
+    @swagger_auto_schema(tags=["Vehicle-Images"])
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+    
     def perform_create(self, serializer):
         serializer.validated_data.get("vehicle")
         serializer.save()
@@ -74,31 +97,73 @@ class VehicleLocationListCreateAPIView(CreateAPIView):
     serializer_class = VehicleLocationSerializer
     throttle_classes = [CustomUserRateThrottle, CustomAnonRateThrottle]
 
-
+    @swagger_auto_schema(tags=["Vehicle-Locations"])
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+    
 class VehicleLocationDetailAPIView(RetrieveUpdateDestroyAPIView):
     queryset = VehicleLocation.objects.all()
     serializer_class = VehicleLocationSerializer
     lookup_field = "id"
     throttle_classes = [CustomUserRateThrottle, CustomAnonRateThrottle]
 
+    @swagger_auto_schema(tags=["Vehicle-Locations"])
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+    @swagger_auto_schema(tags=["Vehicle-Locations"])
+    def put(self, request, *args, **kwargs):
+        return super().put(request, *args, **kwargs)
+    
+    @swagger_auto_schema(tags=["Vehicle-Locations"])
+    def patch(self, request, *args, **kwargs):
+        return super().patch(request, *args, **kwargs)
+    @swagger_auto_schema(tags=["Vehicle-Locations"])
+    def delete(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
 
 class VehicleBrandList(ListCreateAPIView):
     serializer_class = VehicleBrandSerializer
     queryset = Brand.objects.all()
     throttle_classes = [CustomUserRateThrottle, CustomAnonRateThrottle]
-
+    @swagger_auto_schema(tags=["Vehicle-Brands"])
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+    @swagger_auto_schema(tags=["Vehicle-Brands"])
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
 
 class VehicleBrandDetail(RetrieveUpdateDestroyAPIView):
     serializer_class = VehicleBrandSerializer
     queryset = Brand.objects.all()
     lookup_field = "id"
     throttle_classes = [CustomUserRateThrottle, CustomAnonRateThrottle]
+    @swagger_auto_schema(tags=["Vehicle-Brands"])
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+    
+    @swagger_auto_schema(tags=["Vehicle-Brands"])
+    def put(self, request, *args, **kwargs):
+        return super().put(request, *args, **kwargs)
+
+    @swagger_auto_schema(tags=["Vehicle-Brands"])
+    def patch(self, request, *args, **kwargs):
+        return super().patch(request, *args, **kwargs)
+    @swagger_auto_schema(tags=["Vehicle-Brands"])
+    def delete(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
 
 
 class VehicleCategoryList(ListCreateAPIView):
     serializer_class = VehicleCategorySerializer
     queryset = Category.objects.all()
     throttle_classes = [CustomUserRateThrottle, CustomAnonRateThrottle]
+    @swagger_auto_schema(tags=["Vehicle-Categories"])
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+    
+    @swagger_auto_schema(tags=["Vehicle-Categories"])
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
 
 
 class VehicleCategoryDetail(RetrieveUpdateDestroyAPIView):
@@ -106,7 +171,19 @@ class VehicleCategoryDetail(RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     lookup_field = "id"
     throttle_classes = [CustomUserRateThrottle, CustomAnonRateThrottle]
-
+    @swagger_auto_schema(tags=["Vehicle-Categories"])
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+    @swagger_auto_schema(tags=["Vehicle-Categories"])
+    def put(self, request, *args, **kwargs):
+        return super().put(request, *args, **kwargs)
+    @swagger_auto_schema(tags=["Vehicle-Categories"])
+    def patch(self, request, *args, **kwargs):
+        return super().patch(request, *args, **kwargs)
+    @swagger_auto_schema(tags=["Vehicle-Categories"])
+    def delete(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
+    
 
 
 
@@ -119,6 +196,7 @@ class VehicleReviewList(ListCreateAPIView):
     pagination_class = LargeResultSetPagination 
 
     @swagger_auto_schema(
+        tags=["Vehicle-Reviews"],
         manual_parameters=[
             openapi.Parameter(
                 'vehicle_id',  # Filter parameter for vehicle ID
@@ -138,6 +216,10 @@ class VehicleReviewList(ListCreateAPIView):
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
+    @swagger_auto_schema(tags=["Vehicle-Reviews"])
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+    
 
 
 class VehicleReviewDetail(RetrieveUpdateDestroyAPIView):
@@ -145,3 +227,17 @@ class VehicleReviewDetail(RetrieveUpdateDestroyAPIView):
     queryset = VehicleReview.objects.all()
     lookup_field = "id"
 
+    @swagger_auto_schema(tags=["Vehicle-Reviews"])
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+    @swagger_auto_schema(tags=["Vehicle-Reviews"])
+    def patch(self, request, *args, **kwargs):
+        return super().patch(request, *args, **kwargs)
+
+    @swagger_auto_schema(tags=["Vehicle-Reviews"])
+    def put(self, request, *args, **kwargs):
+        return super().put(request, *args, **kwargs)
+    @swagger_auto_schema(tags=["Vehicle-Reviews"])
+    def delete(self, request, *args, **kwargs):
+        return super().delete(request, *args, **kwargs)
+    
