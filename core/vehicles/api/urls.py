@@ -10,6 +10,8 @@ from .v1.views import (
     VehicleCategoryDetail,
     VehicleCategoryList,
     VehicleBrandList,
+    VehicleReviewList,
+    VehicleReviewDetail,
 )
 
 
@@ -24,4 +26,6 @@ urlpatterns = [
     path("brand/<int:id>/", VehicleBrandDetail.as_view()),
     path("category/", VehicleCategoryList.as_view()),
     path("category/<int:id>/", VehicleCategoryDetail.as_view()),
+    path("reviews/", VehicleReviewList.as_view()),
+    path("reviews/<int:id>/", VehicleReviewDetail.as_view()),
 ]

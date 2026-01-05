@@ -10,8 +10,9 @@ from .serializers import (
     VehicleLocationSerializer,
     VehicleBrandSerializer,
     VehicleCategorySerializer,
+    VehicleReviewSerializer,
 )
-from vehicles.models import Vehicle, VehicleImage, VehicleLocation, Category, Brand
+from vehicles.models import Vehicle, VehicleImage, VehicleLocation, Category, Brand, VehicleReview
 from rest_framework.parsers import MultiPartParser, FormParser
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -104,3 +105,18 @@ class VehicleCategoryDetail(RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     lookup_field = "id"
     throttle_classes = [CustomUserRateThrottle, CustomAnonRateThrottle]
+
+
+
+
+class VehicleReviewList(ListCreateAPIView):
+    serializer_class = VehicleReviewSerializer
+    queryset = VehicleReview.objects.all()
+
+
+
+class VehicleReviewDetail(RetrieveUpdateDestroyAPIView):
+    serializer_class = VehicleReviewSerializer
+    queryset = VehicleReview.objects.all()
+    lookup_field = "id"
+
