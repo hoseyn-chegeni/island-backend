@@ -1,5 +1,6 @@
 from django.db import models
 from .choices import VehicleType, VehicleStatus
+from accounts.models import User
 
 
 class Category(models.Model):
@@ -71,3 +72,20 @@ class VehicleLocation(models.Model):
 
     def __str__(self):
         return f"{self.vehicle.id} at {self.latitude}, {self.longitude}"
+
+
+class VehicleReview(models.Model):
+    vehicle = models.ForeignKey(
+        Vehicle, on_delete=models.CASCADE, related_name="reviews"
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    score = models.PositiveIntegerField(choices=[(i, i) for i in range(1, 6)])
+    content = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ("vehicle", "user")
+
+    def __str__(self):
+        return f"Review by {self.user} for {self.vehicle} (Score: {self.score})"

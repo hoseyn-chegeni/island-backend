@@ -1,7 +1,15 @@
 from rest_framework import serializers
-from vehicles.models import Vehicle, VehicleImage, VehicleLocation, Category, Brand
+from vehicles.models import (
+    Vehicle,
+    VehicleImage,
+    VehicleLocation,
+    Category,
+    Brand,
+    VehicleReview,
+)
 from accounts.models import Vendor
 from rentals.models import VehicleAvailability
+from rentals.models import VehicleRental
 
 
 class VehicleCategorySerializer(serializers.ModelSerializer):
@@ -93,3 +101,25 @@ class VehicleImageAddSerializer(serializers.ModelSerializer):
         read_only_fields = ["id", "created_at"]
 
     image = serializers.ImageField()
+
+
+class VehicleReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VehicleReview
+        fields = ['id', 'vehicle', 'user', 'score', 'content', 'created_at', 'updated_at']  # Include 'id' field
+
+    def validate(self, data):
+        # Ensuring the vehicle exists and the user has rented it
+        user = data.get('user')
+        vehicle = data.get('vehicle')
+
+        rental_exists = VehicleRental.objects.filter(
+            user=user,
+            vehicle=vehicle,
+            status="CONFIRMED"
+        ).exists()
+
+        if not rental_exists:
+            raise serializers.ValidationError("You can only leave a review for a vehicle you have rented.")
+
+        return data
