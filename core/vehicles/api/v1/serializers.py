@@ -76,7 +76,7 @@ class VehicleSerializer(serializers.ModelSerializer):
     locations = VehicleLocationSerializer(many=True, read_only=True)
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
     brand = serializers.PrimaryKeyRelatedField(queryset=Brand.objects.all())
-
+    average_score = serializers.ReadOnlyField()
     vendor = serializers.PrimaryKeyRelatedField(queryset=Vendor.objects.all())
     unavailable_dates = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="date", source="vehicleavailability_set"
@@ -85,7 +85,7 @@ class VehicleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vehicle
         fields = "__all__"
-
+        
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation["vendor"] = VendorSerializer(instance.vendor).data
@@ -105,10 +105,10 @@ class VehicleImageAddSerializer(serializers.ModelSerializer):
 
 
 class VehicleReviewSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = VehicleReview
         fields = ['id', 'vehicle', 'user', 'score', 'content', 'created_at', 'updated_at']
-
     def validate(self, data):
         """
         Ensure that the user has rented the vehicle before submitting a review.

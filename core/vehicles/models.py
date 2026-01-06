@@ -1,7 +1,7 @@
 from django.db import models
 from .choices import VehicleType, VehicleStatus
 from accounts.models import User
-
+from django.db.models import Avg 
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -47,7 +47,11 @@ class Vehicle(models.Model):
 
     def __str__(self):
         return f"{self.brand} {self.model} - {self.plate_number}"
-
+    
+    @property
+    def average_score(self):
+        avg_score = self.reviews.aggregate(Avg('score'))['score__avg']
+        return avg_score if avg_score is not None else 0
 
 class VehicleImage(models.Model):
     vehicle = models.ForeignKey(
