@@ -20,9 +20,6 @@ env = environ.Env(DEBUG=(bool, False))
 
 environ.Env.read_env(BASE_DIR / ".env")
 
-# ======================
-# Core security
-# ======================
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 DEBUG = env.bool("DJANGO_DEBUG", default=False)
 ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=[])

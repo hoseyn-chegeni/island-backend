@@ -66,7 +66,7 @@ class Userlist(ListAPIView):
                 type=openapi.TYPE_STRING,
                 enum=["date_joined", "-date_joined"],
             ),
-        ]
+        ],
     )
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
@@ -78,18 +78,23 @@ class UserDetail(RetrieveUpdateDestroyAPIView):
     lookup_field = "id"
     permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
     throttle_classes = [CustomUserRateThrottle, CustomAnonRateThrottle]
+
     @swagger_auto_schema(tags=["Users"])
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
+
     @swagger_auto_schema(tags=["Users"])
     def put(self, request, *args, **kwargs):
         return super().put(request, *args, **kwargs)
+
     @swagger_auto_schema(tags=["Users"])
     def patch(self, request, *args, **kwargs):
         return super().patch(request, *args, **kwargs)
+
     @swagger_auto_schema(tags=["Users"])
     def delete(self, request, *args, **kwargs):
         return super().delete(request, *args, **kwargs)
+
 
 class ProfileList(ListAPIView):
     serializer_class = ProfileSerializer
@@ -119,9 +124,11 @@ class ProfileList(ListAPIView):
                 "last_name",
             )
         )
+
     @swagger_auto_schema(tags=["Profiles"])
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
+
 
 class ProfileDetail(RetrieveUpdateAPIView):
     serializer_class = ProfileSerializer
@@ -129,22 +136,25 @@ class ProfileDetail(RetrieveUpdateAPIView):
     lookup_field = "id"
     permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
     throttle_classes = [CustomUserRateThrottle, CustomAnonRateThrottle]
+
     @swagger_auto_schema(tags=["Profiles"])
     def put(self, request, *args, **kwargs):
         return super().put(request, *args, **kwargs)
+
     @swagger_auto_schema(tags=["Profiles"])
     def patch(self, request, *args, **kwargs):
         return super().patch(request, *args, **kwargs)
+
     @swagger_auto_schema(tags=["Profiles"])
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
-
 
 
 # TODO: Switch to phone number and OTP registration
 class RegistrationAPIView(generics.GenericAPIView):
     serializer_class = RegistrationSerializer
     throttle_classes = [CustomUserRateThrottle, CustomAnonRateThrottle]
+
     @swagger_auto_schema(tags=["Register"])
     def post(self, request, *args, **kwargs):
         serializer = RegistrationSerializer(data=request.data)
@@ -214,6 +224,7 @@ class LogoutAPIView(generics.GenericAPIView):
 class VendorRegistrationAPIView(generics.GenericAPIView):
     serializer_class = VendorRegistrationSerializer
     throttle_classes = [CustomUserRateThrottle, CustomAnonRateThrottle]
+
     @swagger_auto_schema(tags=["Register"])
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -249,7 +260,7 @@ class VendorListAPIView(ListAPIView):
     throttle_classes = [CustomUserRateThrottle, CustomAnonRateThrottle]
 
     @swagger_auto_schema(
-       tags=["Vendors"],
+        tags=["Vendors"],
         manual_parameters=[
             openapi.Parameter(
                 name="type",
@@ -284,7 +295,7 @@ class VendorListAPIView(ListAPIView):
                 in_=openapi.IN_QUERY,
                 type=openapi.TYPE_INTEGER,
             ),
-        ]
+        ],
     )
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
@@ -296,19 +307,23 @@ class VendorDetailAPIView(RetrieveUpdateDestroyAPIView):
     lookup_field = "id"
     permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
     throttle_classes = [CustomUserRateThrottle, CustomAnonRateThrottle]
+
     @swagger_auto_schema(tags=["Vendors"])
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
+
     @swagger_auto_schema(tags=["Vendors"])
     def put(self, request, *args, **kwargs):
         return super().put(request, *args, **kwargs)
+
     @swagger_auto_schema(tags=["Vendors"])
     def patch(self, request, *args, **kwargs):
         return super().patch(request, *args, **kwargs)
+
     @swagger_auto_schema(tags=["Vendors"])
     def delete(self, request, *args, **kwargs):
         return super().delete(request, *args, **kwargs)
-    
+
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     throttle_classes = [CustomUserRateThrottle, CustomAnonRateThrottle]
