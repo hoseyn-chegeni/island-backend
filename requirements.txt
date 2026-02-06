@@ -24,3 +24,6 @@ sqlparse==0.5.5
 swagger-spec-validator==3.0.4
 typing_extensions==4.15.0
 uritemplate==4.2.0
+
+
+gunicorn
