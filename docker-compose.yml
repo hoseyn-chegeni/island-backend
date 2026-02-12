@@ -37,6 +37,7 @@ services:
     networks:
       - cloud-network
 
+
   nginx:
     image: nginx
     container_name: nginx
