@@ -7,7 +7,7 @@ from .serializers import UserV2Serializer, VerifyOtpSerializer
 from rest_framework.generics import CreateAPIView
 from drf_yasg.utils import swagger_auto_schema
 from notification.models import Otp
-
+from ...utils import generate_jwt_tokens
 class RegisterView(CreateAPIView):
     queryset = UserV2.objects.all()
     serializer_class = UserV2Serializer
@@ -29,21 +29,32 @@ class VerifyOtpView(APIView):
         serializer = VerifyOtpSerializer(data=request.data)
 
         if serializer.is_valid():
-            # After validation, we get the phone number and update the user
             phone_number = serializer.validated_data['phone_number']
-            user = UserV2.objects.get(phone_number=phone_number)
-            
-            # Mark the user as active after OTP validation
-            user.is_active = True
-            user.save()
 
-            # Update the OTP status from 'in_progress' to 'verified'
-            otp_record = Otp.objects.filter(user=user).order_by('-otp_time').first()
-            if otp_record:
-                otp_record.otp_status = 'verified'  # Change status to 'verified'
-                otp_record.save()
+            try:
+                user = UserV2.objects.get(phone_number=phone_number)
 
-            return Response({"message": "OTP verified successfully, user is now active."}, status=status.HTTP_200_OK)
+                # Mark the user as active
+                user.is_active = True
+                user.save()
 
-        # If serializer is invalid, return errors
+                # Update the OTP status from 'in_progress' to 'verified'
+                otp_record = Otp.objects.filter(user=user).order_by('-otp_time').first()
+
+                if otp_record:
+                    otp_record.otp_status = 'verified'
+                    otp_record.save()
+
+                # Manually generate JWT access and refresh tokens for the user
+                tokens = generate_jwt_tokens(user)
+
+                return Response({
+                    "message": "OTP verified successfully, user is now active.",
+                    "access_token": tokens["access_token"],  # Return the access token
+                    "refresh_token": tokens["refresh_token"],  # Return the refresh token
+                }, status=status.HTTP_200_OK)
+
+            except UserV2.DoesNotExist:
+                return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
