@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-from .managers import UserManager
+from .managers import UserManager, UserV2Manager
 from .choices import Gender, VendorStatus, VendorType
 
 # Create your models here.
@@ -54,3 +54,19 @@ class Vendor(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.user.email})"
+
+
+class UserV2(models.Model):
+    phone_number = models.CharField(max_length=20, unique=True)  
+    is_active = models.BooleanField(default=False)
+    
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+
+    USERNAME_FIELD = "phone_number"  
+    REQUIRED_FIELDS = [] 
+
+    objects = UserV2Manager()
+
+    def __str__(self) -> str:
+        return self.phone_number  
