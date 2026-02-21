@@ -16,3 +16,4 @@ class OtpFunction(models.TextChoices):
     REGISTER = 'register', 'Register'
     RESET_PASSWORD = 'reset_password', 'Reset Password'
     TWO_FACTOR_AUTH = 'two_factor_auth', 'Two-Factor Authentication'
+    LOGIN = 'login', 'Login'

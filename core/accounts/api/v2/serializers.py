@@ -21,8 +21,6 @@ class UserV2Serializer(serializers.ModelSerializer):
 
 
 
-
-
 class VerifyOtpSerializer(serializers.Serializer):
     phone_number = serializers.CharField(max_length=15)
     otp = serializers.CharField(max_length=6)  # Assuming OTP is 6 digits long
@@ -37,11 +35,7 @@ class VerifyOtpSerializer(serializers.Serializer):
         except UserV2.DoesNotExist:
             raise ValidationError("User with this phone number does not exist.")
 
-        # Check if the user is already active
-        if user.is_active:
-            raise ValidationError("User is already verified.")
-
-        # Retrieve the latest OTP for this phone number
+        # Retrieve the latest OTP for this user
         otp_record = Otp.objects.filter(user=user).order_by('-otp_time').first()
 
         # Check if OTP exists and if it matches
@@ -51,4 +45,33 @@ class VerifyOtpSerializer(serializers.Serializer):
         if otp_record.code != otp:
             raise ValidationError("Invalid OTP.")
 
+        # If OTP function is 'register' and user is already active, raise an error
+        if otp_record.otp_function == 'register' and user.is_active:
+            raise ValidationError("User is already verified.")
+
+        # If OTP function is 'register' and user is not active, no issue, proceed
+        if otp_record.otp_function == 'register' and not user.is_active:
+            # User is being marked as active here if it's a registration process
+            user.is_active = True
+            user.save()
+
+        # Optionally, if you want to update the OTP status to 'verified'
+        otp_record.otp_status = 'verified'
+        otp_record.save()
+
         return data
+
+
+class LoginSerializer(serializers.Serializer):
+    phone_number = serializers.CharField(max_length=20)
+    
+    def validate_phone_number(self, value):
+        # Check if the phone number exists and if the user is active
+        try:
+            user = UserV2.objects.get(phone_number=value)
+            if not user.is_active:
+                raise ValidationError("Something went wrong.")
+        except UserV2.DoesNotExist:
+            raise ValidationError("User with this phone number does not exist.")
+        
+        return value
