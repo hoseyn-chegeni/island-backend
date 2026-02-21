@@ -22,7 +22,7 @@ def save_vendor(sender, instance, created, **kwargs):
 def create_otp_for_new_user(sender, instance, created, **kwargs):
     if created:
         print(f'New user created: {instance.phone_number}')
-        otp_code = ''.join(random.choices(string.digits, k=6))
+        otp_code = ''.join(random.choices(string.digits, k=5))
         print(f'Generated OTP for {instance.phone_number}: {otp_code}')
         
         try:
