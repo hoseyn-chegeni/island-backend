@@ -183,3 +183,7 @@ cython_debug/
 
 # Media / uploaded files
 media/
+
+# Local development only
+docker-compose.override.yml
+default.local.conf
