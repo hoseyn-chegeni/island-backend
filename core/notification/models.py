@@ -1,6 +1,5 @@
 from django.db import models
-from accounts.models import User
-import uuid
+from accounts.models import UserV2
 from .choices import OtpFunction,OtpStatus, OtpTypes
 # Create your models here.
 
@@ -15,7 +14,7 @@ class Otp(models.Model):
     input = models.CharField(max_length=255, null=True, blank=True)  # For phone number or email
     code = models.CharField(max_length=6)  # OTP code, adjust length as needed
     otp_time = models.DateTimeField(auto_now_add=True)  # The time when OTP was generated
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)  # Assuming User model is used for user information
+    user = models.ForeignKey(UserV2, on_delete=models.SET_NULL, null=True, blank=True)  # Assuming User model is used for user information
 
     def __str__(self):
         return f'OTP for {self.user} - Status: {self.otp_status}'
