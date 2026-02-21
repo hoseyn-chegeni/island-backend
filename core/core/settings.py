@@ -27,6 +27,7 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=[])
 # Application definition
 
 INSTALLED_APPS = [
+    "corsheaders",
     "accounts",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -161,4 +163,19 @@ USE_X_FORWARDED_HOST = True
 CSRF_TRUSTED_ORIGINS = [
     "https://backstagefunisland.ir",
     "https://www.backstagefunisland.ir",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://fun-island.liara.run",
 ]
+
+# Set this to False in production for security!
+CORS_ALLOW_ALL_ORIGINS = False 
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://fun-island.liara.run",
+]
+
+# If your frontend needs to send cookies/auth headers
+CORS_ALLOW_CREDENTIALS = True
