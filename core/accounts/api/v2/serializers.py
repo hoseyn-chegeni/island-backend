@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from ...models import UserV2
 from django.core.exceptions import ValidationError
-
+from notification.models import Otp
 class UserV2Serializer(serializers.ModelSerializer):
     class Meta:
         model = UserV2
@@ -24,23 +24,31 @@ class UserV2Serializer(serializers.ModelSerializer):
 
 
 class VerifyOtpSerializer(serializers.Serializer):
-    phone_number = serializers.CharField(max_length=15)  
-    otp = serializers.CharField(max_length=5)
-
+    phone_number = serializers.CharField(max_length=15)
+    otp = serializers.CharField(max_length=6)  # Assuming OTP is 6 digits long
+    
     def validate(self, data):
         phone_number = data.get('phone_number')
         otp = data.get('otp')
 
-        # Validate OTP (In this case, it's always '12345')
-        if otp != '12345':
-            raise ValidationError("Invalid OTP.")
-
-        # Check if the user exists with the provided phone number and is not active
+        # Check if the user exists
         try:
             user = UserV2.objects.get(phone_number=phone_number)
-            if user.is_active:
-                raise ValidationError("User is already verified.")
         except UserV2.DoesNotExist:
             raise ValidationError("User with this phone number does not exist.")
+
+        # Check if the user is already active
+        if user.is_active:
+            raise ValidationError("User is already verified.")
+
+        # Retrieve the latest OTP for this phone number
+        otp_record = Otp.objects.filter(user=user).order_by('-otp_time').first()
+
+        # Check if OTP exists and if it matches
+        if not otp_record:
+            raise ValidationError("No OTP found for this user.")
+
+        if otp_record.code != otp:
+            raise ValidationError("Invalid OTP.")
 
         return data
