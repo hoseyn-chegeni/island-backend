@@ -179,3 +179,12 @@ CORS_ALLOWED_ORIGINS = [
 
 # If your frontend needs to send cookies/auth headers
 CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_METHODS = (
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+)
