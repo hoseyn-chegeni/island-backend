@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ...models import UserV2
+from ...models import UserV2, ProfileV2
 from django.core.exceptions import ValidationError
 from notification.models import Otp
 class UserV2Serializer(serializers.ModelSerializer):
@@ -75,3 +75,21 @@ class LoginSerializer(serializers.Serializer):
             raise ValidationError("User with this phone number does not exist.")
         
         return value
+    
+
+
+class ProfileV2Serializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ProfileV2
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "avatar_url",
+            "national_id",
+            "date_of_birth",
+            "gender",
+            "created_date",
+            "updated_date",
+        ]

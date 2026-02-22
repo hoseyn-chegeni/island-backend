@@ -1,22 +1,26 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from ...models import UserV2
+from ...models import UserV2, ProfileV2
 from django.utils.translation import gettext_lazy as _
-from .serializers import UserV2Serializer, VerifyOtpSerializer, LoginSerializer
-from rest_framework.generics import CreateAPIView
+from .serializers import UserV2Serializer, VerifyOtpSerializer, LoginSerializer, ProfileV2Serializer
+from rest_framework.generics import CreateAPIView,ListAPIView,RetrieveUpdateAPIView
 from drf_yasg.utils import swagger_auto_schema
 from notification.models import Otp
 from ...utils import generate_jwt_tokens
 import random
 import string
 from django.utils import timezone
+from rest_framework.response import Response
+from rest_framework import status
+from drf_yasg.utils import swagger_auto_schema
+
 
 
 class RegisterView(CreateAPIView):
     queryset = UserV2.objects.all()
     serializer_class = UserV2Serializer
-
+    @swagger_auto_schema(tags=["Accounts V2"])
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         
@@ -31,7 +35,7 @@ class RegisterView(CreateAPIView):
 
 
 class LoginView(APIView):
-    @swagger_auto_schema(request_body=LoginSerializer)
+    @swagger_auto_schema(request_body=LoginSerializer, tags=["Accounts V2"])
     def post(self, request, *args, **kwargs):
         # Deserialize the request data using LoginSerializer
         serializer = LoginSerializer(data=request.data)
@@ -73,7 +77,7 @@ class LoginView(APIView):
     
 
 class VerifyOtpView(APIView):
-    @swagger_auto_schema(request_body=VerifyOtpSerializer)
+    @swagger_auto_schema(request_body=VerifyOtpSerializer, tags=["Accounts V2"])
     def post(self, request, *args, **kwargs):
         # Serialize the data
         serializer = VerifyOtpSerializer(data=request.data)
@@ -136,3 +140,30 @@ class VerifyOtpView(APIView):
                 return Response({"error": "An unexpected error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
+
+class ProfileV2List(ListAPIView):
+    serializer_class = ProfileV2Serializer
+    queryset = ProfileV2.objects.all()
+
+    @swagger_auto_schema(tags=["Accounts V2"])
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+class ProfileV2Detail(RetrieveUpdateAPIView):
+    serializer_class = ProfileV2Serializer
+    queryset = ProfileV2.objects.all()
+    lookup_field = "id"
+    @swagger_auto_schema(tags=["Accounts V2"])
+    def put(self, request, *args, **kwargs):
+        return super().put(request, *args, **kwargs)
+
+    @swagger_auto_schema(tags=["Accounts V2"])
+    def patch(self, request, *args, **kwargs):
+        return super().patch(request, *args, **kwargs)
+
+    @swagger_auto_schema(tags=["Accounts V2"])
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
