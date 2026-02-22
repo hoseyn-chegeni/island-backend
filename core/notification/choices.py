@@ -17,3 +17,8 @@ class OtpFunction(models.TextChoices):
     RESET_PASSWORD = 'reset_password', 'Reset Password'
     TWO_FACTOR_AUTH = 'two_factor_auth', 'Two-Factor Authentication'
     LOGIN = 'login', 'Login'
+
+class ReserveRequestStatus(models.TextChoices):
+    IN_PROGRESS = 'in_progress', 'In Progress'
+    DONE = 'done', 'Done'
+
