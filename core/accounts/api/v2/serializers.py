@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ...models import UserV2, ProfileV2
+from ...models import UserV2, ProfileV2,VendorV2
 from django.core.exceptions import ValidationError
 from notification.models import Otp
 class UserV2Serializer(serializers.ModelSerializer):
@@ -93,3 +93,19 @@ class ProfileV2Serializer(serializers.ModelSerializer):
             "created_date",
             "updated_date",
         ]
+
+
+class VendorUserSerV2ializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserV2
+        fields = ["id", "phone_number", "is_active", "is_vendor"]
+
+
+class VendorV2Serializer(serializers.ModelSerializer):
+    user = VendorUserSerV2ializer(read_only=True)
+
+    class Meta:
+        model = VendorV2
+        fields = "__all__"
+        read_only_fields = ["user", "created_at"]
+        ref_name = "AccountsVendorV2"

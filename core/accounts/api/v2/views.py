@@ -1,9 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from ...models import UserV2, ProfileV2
+from ...models import UserV2, ProfileV2, VendorV2
 from django.utils.translation import gettext_lazy as _
-from .serializers import UserV2Serializer, VerifyOtpSerializer, LoginSerializer, ProfileV2Serializer
+from .serializers import UserV2Serializer, VerifyOtpSerializer, LoginSerializer, ProfileV2Serializer,VendorV2Serializer
 from rest_framework.generics import CreateAPIView,ListAPIView,RetrieveUpdateAPIView
 from drf_yasg.utils import swagger_auto_schema
 from notification.models import Otp
@@ -13,7 +13,14 @@ import string
 from django.utils import timezone
 from rest_framework.response import Response
 from rest_framework import status
-from drf_yasg.utils import swagger_auto_schema
+
+
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
+from core.utils import LargeResultSetPagination
+from drf_yasg import openapi
+from accounts.choices import VendorStatus, VendorType
+
 
 
 
@@ -183,3 +190,76 @@ class ProfileV2Detail(RetrieveUpdateAPIView):
     @swagger_auto_schema(tags=["Accounts V2"])
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
+    
+
+
+
+
+class VendorV2ListAPIView(ListAPIView):
+    queryset = VendorV2.objects.select_related("user")
+    serializer_class = VendorV2Serializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ["type", "status"]
+    search_fields = ["name", "=user__email"]
+    ordering_fields = ["created_at"]
+    pagination_class = LargeResultSetPagination
+
+    @swagger_auto_schema(
+        tags=["Accounts V2"],
+        manual_parameters=[
+            openapi.Parameter(
+                name="type",
+                in_=openapi.IN_QUERY,
+                type=openapi.TYPE_STRING,
+                enum=[choice.value for choice in VendorType],
+            ),
+            openapi.Parameter(
+                name="status",
+                in_=openapi.IN_QUERY,
+                type=openapi.TYPE_STRING,
+                enum=[choice.value for choice in VendorStatus],
+            ),
+            openapi.Parameter(
+                name="search",
+                in_=openapi.IN_QUERY,
+                type=openapi.TYPE_STRING,
+            ),
+            openapi.Parameter(
+                name="ordering",
+                in_=openapi.IN_QUERY,
+                type=openapi.TYPE_STRING,
+                enum=["created_at", "-created_at"],
+            ),
+            openapi.Parameter(
+                name="page",
+                in_=openapi.IN_QUERY,
+                type=openapi.TYPE_INTEGER,
+            ),
+            openapi.Parameter(
+                name="page_size",
+                in_=openapi.IN_QUERY,
+                type=openapi.TYPE_INTEGER,
+            ),
+        ],
+    )
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+
+class VendorV2DetailAPIView(RetrieveUpdateAPIView):
+    queryset = VendorV2.objects.select_related("user")
+    serializer_class = VendorV2Serializer
+    lookup_field = "id"
+
+    @swagger_auto_schema(tags=["Accounts V2"])
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    @swagger_auto_schema(tags=["Accounts V2"])
+    def put(self, request, *args, **kwargs):
+        return super().put(request, *args, **kwargs)
+
+    @swagger_auto_schema(tags=["Accounts V2"])
+    def patch(self, request, *args, **kwargs):
+        return super().patch(request, *args, **kwargs)
+
