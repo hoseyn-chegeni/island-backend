@@ -20,7 +20,7 @@ class Otp(models.Model):
         return f'OTP for {self.user} - Status: {self.otp_status}'
     
 class ReserveRequest(models.Model):
-    input = models.CharField(max_length=255)
+    input = models.CharField(max_length=255, blank = True, null = True)
     status = models.CharField(max_length=20, choices=ReserveRequestStatus.choices, default=ReserveRequestStatus.IN_PROGRESS)
 
     created_date = models.DateTimeField(auto_now_add=True)
