@@ -3,8 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from ...models import UserV2, ProfileV2, VendorV2
 from django.utils.translation import gettext_lazy as _
-from .serializers import UserV2Serializer, VerifyOtpSerializer, LoginSerializer, ProfileV2Serializer,VendorV2Serializer
-from rest_framework.generics import CreateAPIView,ListAPIView,RetrieveUpdateAPIView
+from .serializers import UserV2Serializer, VerifyOtpSerializer, LoginSerializer, ProfileV2Serializer,VendorV2Serializer, SimpleUserV2Serializer
+from rest_framework.generics import CreateAPIView,ListAPIView,RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView
 from drf_yasg.utils import swagger_auto_schema
 from notification.models import Otp
 from ...utils import generate_jwt_tokens
@@ -27,7 +27,6 @@ from accounts.choices import VendorStatus, VendorType
 class RegisterView(CreateAPIView):
     queryset = UserV2.objects.all()
     serializer_class = UserV2Serializer
-    @swagger_auto_schema(tags=["Accounts V2"])
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         
@@ -44,7 +43,6 @@ class VendorV2RegisterView(CreateAPIView):
     queryset = UserV2.objects.all()
     serializer_class = UserV2Serializer
 
-    @swagger_auto_schema(tags=["Accounts V2"])
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
 
@@ -58,7 +56,7 @@ class VendorV2RegisterView(CreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginView(APIView):
-    @swagger_auto_schema(request_body=LoginSerializer, tags=["Accounts V2"])
+    @swagger_auto_schema(request_body=LoginSerializer)
     def post(self, request, *args, **kwargs):
         # Deserialize the request data using LoginSerializer
         serializer = LoginSerializer(data=request.data)
@@ -100,7 +98,7 @@ class LoginView(APIView):
     
 
 class VerifyOtpView(APIView):
-    @swagger_auto_schema(request_body=VerifyOtpSerializer, tags=["Accounts V2"])
+    @swagger_auto_schema(request_body=VerifyOtpSerializer)
     def post(self, request, *args, **kwargs):
         # Serialize the data
         serializer = VerifyOtpSerializer(data=request.data)
@@ -171,7 +169,6 @@ class ProfileV2List(ListAPIView):
     serializer_class = ProfileV2Serializer
     queryset = ProfileV2.objects.all()
 
-    @swagger_auto_schema(tags=["Accounts V2"])
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
@@ -179,15 +176,12 @@ class ProfileV2Detail(RetrieveUpdateAPIView):
     serializer_class = ProfileV2Serializer
     queryset = ProfileV2.objects.all()
     lookup_field = "id"
-    @swagger_auto_schema(tags=["Accounts V2"])
     def put(self, request, *args, **kwargs):
         return super().put(request, *args, **kwargs)
 
-    @swagger_auto_schema(tags=["Accounts V2"])
     def patch(self, request, *args, **kwargs):
         return super().patch(request, *args, **kwargs)
 
-    @swagger_auto_schema(tags=["Accounts V2"])
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
     
@@ -205,7 +199,6 @@ class VendorV2ListAPIView(ListAPIView):
     pagination_class = LargeResultSetPagination
 
     @swagger_auto_schema(
-        tags=["Accounts V2"],
         manual_parameters=[
             openapi.Parameter(
                 name="type",
@@ -251,15 +244,24 @@ class VendorV2DetailAPIView(RetrieveUpdateAPIView):
     serializer_class = VendorV2Serializer
     lookup_field = "id"
 
-    @swagger_auto_schema(tags=["Accounts V2"])
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
-    @swagger_auto_schema(tags=["Accounts V2"])
     def put(self, request, *args, **kwargs):
         return super().put(request, *args, **kwargs)
 
-    @swagger_auto_schema(tags=["Accounts V2"])
     def patch(self, request, *args, **kwargs):
         return super().patch(request, *args, **kwargs)
 
+
+
+class UserV2ListAPIView(ListAPIView):
+    queryset = UserV2.objects.all()
+    serializer_class = SimpleUserV2Serializer
+
+
+class UserV2DetailAPIView(RetrieveUpdateDestroyAPIView):
+    queryset = UserV2.objects.all()
+    serializer_class = SimpleUserV2Serializer
+    lookup_field = "id"  
+    

@@ -109,3 +109,21 @@ class VendorV2Serializer(serializers.ModelSerializer):
         fields = "__all__"
         read_only_fields = ["user", "created_at"]
         ref_name = "AccountsVendorV2"
+
+
+
+
+class SimpleUserV2Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserV2
+        fields =  "__all__"
+        read_only_fields = ["phone_number", "created_date","updated_date"]
+
+    def update(self, instance, validated_data):
+        """
+        Update the user instance with validated data.
+        """
+        instance.is_active = validated_data.get('is_active', instance.is_active)
+        instance.is_vendor = validated_data.get('is_vendor', instance.is_vendor)
+        instance.save()
+        return instance
