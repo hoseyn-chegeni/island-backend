@@ -38,7 +38,7 @@ class VehicleRental(models.Model):
         ("CANCELLED", "Cancelled"),
     )
 
-    user = models.ForeignKey("accounts.User", on_delete=models.CASCADE)
+    user = models.ForeignKey("accounts.UserV2", on_delete=models.CASCADE)
     vehicle = models.ForeignKey("vehicles.Vehicle", on_delete=models.CASCADE)
 
     start_time = models.DateTimeField()

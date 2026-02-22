@@ -2,11 +2,6 @@ from django.db import models
 from accounts.models import UserV2
 from .choices import OtpFunction,OtpStatus, OtpTypes,ReserveRequestStatus
 # Create your models here.
-
-
-
-
-
 class Otp(models.Model):
     otp_status = models.CharField(max_length=20,choices=OtpStatus.choices,default=OtpStatus.IN_PROGRESS)
     otp_type = models.CharField(max_length=10,choices=OtpTypes.choices,default=OtpTypes.EMAIL)

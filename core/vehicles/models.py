@@ -1,6 +1,6 @@
 from django.db import models
 from .choices import VehicleType, VehicleStatus
-from accounts.models import User
+from accounts.models import UserV2
 from django.db.models import Avg
 
 
@@ -21,7 +21,7 @@ class Brand(models.Model):
 
 class Vehicle(models.Model):
     vendor = models.ForeignKey(
-        "accounts.Vendor", on_delete=models.CASCADE, related_name="vehicles"
+        "accounts.VendorV2", on_delete=models.CASCADE, related_name="vehicles"
     )
 
     type = models.CharField(max_length=20, choices=VehicleType.choices)
@@ -84,7 +84,7 @@ class VehicleReview(models.Model):
     vehicle = models.ForeignKey(
         Vehicle, on_delete=models.CASCADE, related_name="reviews"
     )
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserV2, on_delete=models.CASCADE)
     score = models.PositiveIntegerField(choices=[(i, i) for i in range(1, 6)])
     content = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)

@@ -11,6 +11,7 @@ from .serializers import (
     VehicleBrandSerializer,
     VehicleCategorySerializer,
     VehicleReviewSerializer,
+    VehicleAvailabilityRequestSerializer,
 )
 from vehicles.models import (
     Vehicle,
@@ -19,7 +20,9 @@ from vehicles.models import (
     Category,
     Brand,
     VehicleReview,
+    
 )
+from rentals.models import VehicleAvailability
 from rest_framework.parsers import MultiPartParser, FormParser
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -31,7 +34,10 @@ from core.utils import (
 from rest_framework.parsers import MultiPartParser, FormParser
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-
+from rest_framework.views import APIView
+from datetime import timedelta
+from rest_framework.response import Response
+from rest_framework import status
 
 class VehicleList(ListCreateAPIView):
     serializer_class = VehicleSerializer
@@ -40,7 +46,7 @@ class VehicleList(ListCreateAPIView):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     throttle_classes = [CustomUserRateThrottle, CustomAnonRateThrottle]
     filterset_fields = [
-        "vendor__user__email",
+        "vendor__user__phone_number",
         "type",
         "brand",
         "color",
@@ -270,3 +276,33 @@ class VehicleReviewDetail(RetrieveUpdateDestroyAPIView):
     @swagger_auto_schema(tags=["Vehicle-Reviews"])
     def delete(self, request, *args, **kwargs):
         return super().delete(request, *args, **kwargs)
+
+
+
+class VehicleAvailabilityView(APIView):
+    @swagger_auto_schema(request_body=VehicleAvailabilityRequestSerializer, tags=["Vehicles"])
+    def post(self, request, *args, **kwargs):
+        # Deserialize the input data
+        serializer = VehicleAvailabilityRequestSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            start_time = serializer.validated_data['start_time']
+            end_time = serializer.validated_data['end_time']
+            
+            # Get the vehicles that have no conflicting availability during the requested time range
+            available_vehicles = Vehicle.objects.exclude(
+                id__in=VehicleAvailability.objects.filter(
+                    date__range=[start_time.date(), end_time.date()]
+                ).values_list('vehicle', flat=True)
+            )
+            
+            # If no available vehicles found, return a 404 error
+            if not available_vehicles:
+                return Response({"message": "No vehicles are available during this time range."}, status=status.HTTP_404_NOT_FOUND)
+
+            # Serialize the list of available vehicles
+            vehicle_serializer = VehicleSerializer(available_vehicles, many=True)
+
+            return Response(vehicle_serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -7,7 +7,7 @@ from vehicles.models import (
     Brand,
     VehicleReview,
 )
-from accounts.models import Vendor
+from accounts.models import VendorV2
 from rentals.models import VehicleAvailability
 from rentals.models import VehicleRental
 
@@ -64,11 +64,11 @@ class VehicleImageSerializer(serializers.ModelSerializer):
 
 
 class VendorSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(source="user.email", read_only=True)
+    phone_number = serializers.CharField(source="user.phone_number", read_only=True)
 
     class Meta:
-        model = Vendor
-        fields = ["id", "name", "email", "type", "status"]
+        model = VendorV2
+        fields = ["id", "name", "phone_number", "type", "status"]
 
 
 class VehicleSerializer(serializers.ModelSerializer):
@@ -77,7 +77,7 @@ class VehicleSerializer(serializers.ModelSerializer):
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
     brand = serializers.PrimaryKeyRelatedField(queryset=Brand.objects.all())
     average_score = serializers.ReadOnlyField()
-    vendor = serializers.PrimaryKeyRelatedField(queryset=Vendor.objects.all())
+    vendor = serializers.PrimaryKeyRelatedField(queryset=VendorV2.objects.all())
     unavailable_dates = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="date", source="vehicleavailability_set"
     )
@@ -135,3 +135,9 @@ class VehicleReviewSerializer(serializers.ModelSerializer):
             )
 
         return data
+
+
+
+class VehicleAvailabilityRequestSerializer(serializers.Serializer):
+    start_time = serializers.DateTimeField()
+    end_time = serializers.DateTimeField()
