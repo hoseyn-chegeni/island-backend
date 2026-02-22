@@ -87,3 +87,18 @@ class ProfileV2(models.Model):
 
     def __str__(self) -> str:
         return self.user.phone_number
+    
+
+class VendorV2(models.Model):
+    user = models.OneToOneField(UserV2, on_delete=models.CASCADE, related_name="vendor")
+    name = models.CharField(max_length=255)
+    type = models.CharField(max_length=10, choices=VendorType.choices)
+    contact_phone = models.CharField(max_length=20)
+    status = models.CharField(
+        max_length=20, choices=VendorStatus.choices, default=VendorStatus.ACTIVE
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.user.phone_number})"
