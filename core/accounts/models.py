@@ -59,7 +59,7 @@ class Vendor(models.Model):
 class UserV2(models.Model):
     phone_number = models.CharField(max_length=20, unique=True)  
     is_active = models.BooleanField(default=False)
-    
+    is_vendor = models.BooleanField(default = False)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
@@ -70,3 +70,20 @@ class UserV2(models.Model):
 
     def __str__(self) -> str:
         return self.phone_number  
+    
+
+class ProfileV2(models.Model):
+    user = models.ForeignKey(UserV2, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=255, blank=True, null=True)
+    last_name = models.CharField(max_length=255, blank=True, null=True)
+    avatar_url = models.ImageField(blank=True, null=True)
+    national_id = models.CharField(max_length=20, blank=True, null=True, unique=True)
+    date_of_birth = models.DateField(blank=True, null=True)
+    gender = models.CharField(
+        max_length=1, choices=Gender.choices, blank=True, null=True
+    )
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return self.user.phone_number
