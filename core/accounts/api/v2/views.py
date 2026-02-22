@@ -33,6 +33,22 @@ class RegisterView(CreateAPIView):
 
 
 
+class VendorV2RegisterView(CreateAPIView):
+    queryset = UserV2.objects.all()
+    serializer_class = UserV2Serializer
+
+    @swagger_auto_schema(tags=["Accounts V2"])
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            phone_number = serializer.validated_data['phone_number']
+
+            user = serializer.save(is_vendor=True)  
+            
+            return Response({"message": "OTP sent."}, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginView(APIView):
     @swagger_auto_schema(request_body=LoginSerializer, tags=["Accounts V2"])
