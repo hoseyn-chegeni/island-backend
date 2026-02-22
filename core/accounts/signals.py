@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import User, Profile, Vendor, UserV2
+from .models import User, Profile, Vendor, UserV2, ProfileV2
 import random
 import string
 from django.utils import timezone
@@ -37,3 +37,9 @@ def create_otp_for_new_user(sender, instance, created, **kwargs):
             )
         except Exception as e:
             print(f"Error creating OTP for {instance.phone_number}: {e}")
+
+
+@receiver(post_save, sender=UserV2)
+def save_profile(sender, instance, created, **kwargs):
+    if created:
+        ProfileV2.objects.create(user=instance)
