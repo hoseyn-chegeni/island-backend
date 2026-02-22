@@ -57,20 +57,20 @@ class Vendor(models.Model):
 
 
 class UserV2(models.Model):
-    phone_number = models.CharField(max_length=20, unique=True)  
+    phone_number = models.CharField(max_length=20, unique=True)
     is_active = models.BooleanField(default=False)
-    is_vendor = models.BooleanField(default = False)
+    is_vendor = models.BooleanField(default=False)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
-    USERNAME_FIELD = "phone_number"  
-    REQUIRED_FIELDS = [] 
+    USERNAME_FIELD = "phone_number"
+    REQUIRED_FIELDS = []
 
     objects = UserV2Manager()
 
     def __str__(self) -> str:
-        return self.phone_number  
-    
+        return self.phone_number
+
 
 class ProfileV2(models.Model):
     user = models.ForeignKey(UserV2, on_delete=models.CASCADE)
@@ -87,7 +87,7 @@ class ProfileV2(models.Model):
 
     def __str__(self) -> str:
         return self.user.phone_number
-    
+
 
 class VendorV2(models.Model):
     user = models.OneToOneField(UserV2, on_delete=models.CASCADE, related_name="vendor")

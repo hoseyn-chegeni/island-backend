@@ -170,7 +170,7 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 # Set this to False in production for security!
-CORS_ALLOW_ALL_ORIGINS = False 
+CORS_ALLOW_ALL_ORIGINS = False
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",

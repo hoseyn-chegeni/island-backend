@@ -29,6 +29,5 @@ urlpatterns = [
     path("category/<int:id>/", VehicleCategoryDetail.as_view()),
     path("reviews/", VehicleReviewList.as_view()),
     path("reviews/<int:id>/", VehicleReviewDetail.as_view()),
-    path('vehicles/availability/', VehicleAvailabilityView.as_view()),
-
+    path("vehicles/availability/", VehicleAvailabilityView.as_view()),
 ]

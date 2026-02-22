@@ -15,16 +15,64 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Otp',
+            name="Otp",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('otp_status', models.CharField(choices=[('in_progress', 'In Progress'), ('verified', 'Verified'), ('expired', 'Expired'), ('failed', 'Failed')], default='in_progress', max_length=20)),
-                ('otp_type', models.CharField(choices=[('email', 'Email'), ('sms', 'SMS'), ('app', 'App')], default='email', max_length=10)),
-                ('otp_function', models.CharField(blank=True, choices=[('register', 'Register'), ('reset_password', 'Reset Password'), ('two_factor_auth', 'Two-Factor Authentication')], default='register', max_length=20, null=True)),
-                ('input', models.CharField(blank=True, max_length=255, null=True)),
-                ('code', models.CharField(max_length=6)),
-                ('otp_time', models.DateTimeField(auto_now_add=True)),
-                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "otp_status",
+                    models.CharField(
+                        choices=[
+                            ("in_progress", "In Progress"),
+                            ("verified", "Verified"),
+                            ("expired", "Expired"),
+                            ("failed", "Failed"),
+                        ],
+                        default="in_progress",
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "otp_type",
+                    models.CharField(
+                        choices=[("email", "Email"), ("sms", "SMS"), ("app", "App")],
+                        default="email",
+                        max_length=10,
+                    ),
+                ),
+                (
+                    "otp_function",
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ("register", "Register"),
+                            ("reset_password", "Reset Password"),
+                            ("two_factor_auth", "Two-Factor Authentication"),
+                        ],
+                        default="register",
+                        max_length=20,
+                        null=True,
+                    ),
+                ),
+                ("input", models.CharField(blank=True, max_length=255, null=True)),
+                ("code", models.CharField(max_length=6)),
+                ("otp_time", models.DateTimeField(auto_now_add=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

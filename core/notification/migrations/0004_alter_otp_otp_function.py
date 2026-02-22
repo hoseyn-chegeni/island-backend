@@ -6,13 +6,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('notification', '0003_alter_otp_code'),
+        ("notification", "0003_alter_otp_code"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='otp',
-            name='otp_function',
-            field=models.CharField(blank=True, choices=[('register', 'Register'), ('reset_password', 'Reset Password'), ('two_factor_auth', 'Two-Factor Authentication'), ('login', 'Login')], default='register', max_length=20, null=True),
+            model_name="otp",
+            name="otp_function",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("register", "Register"),
+                    ("reset_password", "Reset Password"),
+                    ("two_factor_auth", "Two-Factor Authentication"),
+                    ("login", "Login"),
+                ],
+                default="register",
+                max_length=20,
+                null=True,
+            ),
         ),
     ]

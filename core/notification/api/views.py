@@ -11,5 +11,4 @@ class ReserveRequestListAPIView(ListCreateAPIView):
 class ReserveRequestDetailAPIView(RetrieveUpdateAPIView):
     queryset = ReserveRequest.objects.all()
     serializer_class = ReserveRequestSerializer
-    lookup_field = "id"  
-    
+    lookup_field = "id"

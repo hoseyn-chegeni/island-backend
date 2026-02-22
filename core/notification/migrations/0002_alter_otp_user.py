@@ -7,14 +7,19 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0006_alter_userv2_is_active'),
-        ('notification', '0001_initial'),
+        ("accounts", "0006_alter_userv2_is_active"),
+        ("notification", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='otp',
-            name='user',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='accounts.userv2'),
+            model_name="otp",
+            name="user",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="accounts.userv2",
+            ),
         ),
     ]

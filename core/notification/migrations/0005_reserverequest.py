@@ -6,16 +6,31 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('notification', '0004_alter_otp_otp_function'),
+        ("notification", "0004_alter_otp_otp_function"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ReserveRequest',
+            name="ReserveRequest",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('input', models.CharField(blank=True, max_length=255, null=True)),
-                ('status', models.CharField(choices=[('in_progress', 'In Progress'), ('done', 'Done')], default='in_progress', max_length=20)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("input", models.CharField(blank=True, max_length=255, null=True)),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[("in_progress", "In Progress"), ("done", "Done")],
+                        default="in_progress",
+                        max_length=20,
+                    ),
+                ),
             ],
         ),
     ]

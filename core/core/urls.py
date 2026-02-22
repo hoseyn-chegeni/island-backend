@@ -45,7 +45,7 @@ urlpatterns = [
     path("vehicles/", include("vehicles.urls")),
     path("rentals/", include("rentals.urls")),
     path("blogs/", include("blogs.urls")),
-    path('notification/', include("notification.urls")),
+    path("notification/", include("notification.urls")),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -7,19 +7,25 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0008_vendorv2'),
-        ('vehicles', '0012_vehiclereview'),
+        ("accounts", "0008_vendorv2"),
+        ("vehicles", "0012_vehiclereview"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='vehicle',
-            name='vendor',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='vehicles', to='accounts.vendorv2'),
+            model_name="vehicle",
+            name="vendor",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="vehicles",
+                to="accounts.vendorv2",
+            ),
         ),
         migrations.AlterField(
-            model_name='vehiclereview',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='accounts.userv2'),
+            model_name="vehiclereview",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="accounts.userv2"
+            ),
         ),
     ]

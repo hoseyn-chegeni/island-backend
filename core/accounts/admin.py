@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Profile, Vendor,UserV2,ProfileV2, VendorV2
+from .models import User, Profile, Vendor, UserV2, ProfileV2, VendorV2
 
 # Register your models here.
 admin.site.register(User)

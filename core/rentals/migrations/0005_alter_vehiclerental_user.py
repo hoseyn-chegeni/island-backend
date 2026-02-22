@@ -7,14 +7,16 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0008_vendorv2'),
-        ('rentals', '0004_alter_vehiclerental_end_time_and_more'),
+        ("accounts", "0008_vendorv2"),
+        ("rentals", "0004_alter_vehiclerental_end_time_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='vehiclerental',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='accounts.userv2'),
+            model_name="vehiclerental",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="accounts.userv2"
+            ),
         ),
     ]

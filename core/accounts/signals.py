@@ -5,6 +5,8 @@ import random
 import string
 from django.utils import timezone
 from notification.models import Otp
+
+
 @receiver(post_save, sender=User)
 def save_profile(sender, instance, created, **kwargs):
     if created:
@@ -17,23 +19,22 @@ def save_vendor(sender, instance, created, **kwargs):
         Vendor.objects.create(user=instance)
 
 
-
 @receiver(post_save, sender=UserV2)
 def create_otp_for_new_user(sender, instance, created, **kwargs):
     if created:
-        print(f'New user created: {instance.phone_number}')
-        otp_code = ''.join(random.choices(string.digits, k=5))
-        print(f'Generated OTP for {instance.phone_number}: {otp_code}')
-        
+        print(f"New user created: {instance.phone_number}")
+        otp_code = "".join(random.choices(string.digits, k=5))
+        print(f"Generated OTP for {instance.phone_number}: {otp_code}")
+
         try:
             Otp.objects.create(
-                otp_status='in_progress',
-                otp_type='sms',
-                otp_function='register',
+                otp_status="in_progress",
+                otp_type="sms",
+                otp_function="register",
                 input=instance.phone_number,
                 code=otp_code,
                 otp_time=timezone.now(),
-                user=instance
+                user=instance,
             )
         except Exception as e:
             print(f"Error creating OTP for {instance.phone_number}: {e}")

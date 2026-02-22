@@ -7,28 +7,53 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0006_alter_userv2_is_active'),
+        ("accounts", "0006_alter_userv2_is_active"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='userv2',
-            name='is_vendor',
+            model_name="userv2",
+            name="is_vendor",
             field=models.BooleanField(default=False),
         ),
         migrations.CreateModel(
-            name='ProfileV2',
+            name="ProfileV2",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('first_name', models.CharField(blank=True, max_length=255, null=True)),
-                ('last_name', models.CharField(blank=True, max_length=255, null=True)),
-                ('avatar_url', models.ImageField(blank=True, null=True, upload_to='')),
-                ('national_id', models.CharField(blank=True, max_length=20, null=True, unique=True)),
-                ('date_of_birth', models.DateField(blank=True, null=True)),
-                ('gender', models.CharField(blank=True, choices=[('M', 'Male'), ('F', 'Female')], max_length=1, null=True)),
-                ('created_date', models.DateTimeField(auto_now_add=True)),
-                ('updated_date', models.DateTimeField(auto_now=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='accounts.userv2')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("first_name", models.CharField(blank=True, max_length=255, null=True)),
+                ("last_name", models.CharField(blank=True, max_length=255, null=True)),
+                ("avatar_url", models.ImageField(blank=True, null=True, upload_to="")),
+                (
+                    "national_id",
+                    models.CharField(blank=True, max_length=20, null=True, unique=True),
+                ),
+                ("date_of_birth", models.DateField(blank=True, null=True)),
+                (
+                    "gender",
+                    models.CharField(
+                        blank=True,
+                        choices=[("M", "Male"), ("F", "Female")],
+                        max_length=1,
+                        null=True,
+                    ),
+                ),
+                ("created_date", models.DateTimeField(auto_now_add=True)),
+                ("updated_date", models.DateTimeField(auto_now=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="accounts.userv2",
+                    ),
+                ),
             ],
         ),
     ]

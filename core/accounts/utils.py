@@ -26,7 +26,8 @@ def generate_jwt_tokens(user_v2_instance):
     payload_access = {
         "user_id": user_v2_instance.id,
         "phone_number": user_v2_instance.phone_number,
-        "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=15),  # Token expires in 15 minutes
+        "exp": datetime.datetime.utcnow()
+        + datetime.timedelta(minutes=15),  # Token expires in 15 minutes
         "iat": datetime.datetime.utcnow(),  # Issued at time
     }
 
@@ -34,18 +35,25 @@ def generate_jwt_tokens(user_v2_instance):
     payload_refresh = {
         "user_id": user_v2_instance.id,
         "phone_number": user_v2_instance.phone_number,
-        "exp": datetime.datetime.utcnow() + datetime.timedelta(days=7),  # Refresh token expires in 7 days
+        "exp": datetime.datetime.utcnow()
+        + datetime.timedelta(days=7),  # Refresh token expires in 7 days
         "iat": datetime.datetime.utcnow(),
     }
 
     # Secret key for encoding the JWT
-    secret_key = settings.SECRET_KEY  # Make sure to use your Django SECRET_KEY or a custom one
+    secret_key = (
+        settings.SECRET_KEY
+    )  # Make sure to use your Django SECRET_KEY or a custom one
 
     # Create the JWT access token
-    access_token = jwt.encode(payload_access, secret_key, algorithm="HS256")  # Using HMAC SHA-256 for signing
+    access_token = jwt.encode(
+        payload_access, secret_key, algorithm="HS256"
+    )  # Using HMAC SHA-256 for signing
 
     # Create the JWT refresh token
-    refresh_token = jwt.encode(payload_refresh, secret_key, algorithm="HS256")  # Using HMAC SHA-256 for signing
+    refresh_token = jwt.encode(
+        payload_refresh, secret_key, algorithm="HS256"
+    )  # Using HMAC SHA-256 for signing
 
     return {
         "access_token": str(access_token),  # Return access token as string

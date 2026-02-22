@@ -20,7 +20,6 @@ from vehicles.models import (
     Category,
     Brand,
     VehicleReview,
-    
 )
 from rentals.models import VehicleAvailability
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -38,6 +37,7 @@ from rest_framework.views import APIView
 from datetime import timedelta
 from rest_framework.response import Response
 from rest_framework import status
+
 
 class VehicleList(ListCreateAPIView):
     serializer_class = VehicleSerializer
@@ -278,27 +278,31 @@ class VehicleReviewDetail(RetrieveUpdateDestroyAPIView):
         return super().delete(request, *args, **kwargs)
 
 
-
 class VehicleAvailabilityView(APIView):
-    @swagger_auto_schema(request_body=VehicleAvailabilityRequestSerializer, tags=["Vehicles"])
+    @swagger_auto_schema(
+        request_body=VehicleAvailabilityRequestSerializer, tags=["Vehicles"]
+    )
     def post(self, request, *args, **kwargs):
         # Deserialize the input data
         serializer = VehicleAvailabilityRequestSerializer(data=request.data)
-        
+
         if serializer.is_valid():
-            start_time = serializer.validated_data['start_time']
-            end_time = serializer.validated_data['end_time']
-            
+            start_time = serializer.validated_data["start_time"]
+            end_time = serializer.validated_data["end_time"]
+
             # Get the vehicles that have no conflicting availability during the requested time range
             available_vehicles = Vehicle.objects.exclude(
                 id__in=VehicleAvailability.objects.filter(
                     date__range=[start_time.date(), end_time.date()]
-                ).values_list('vehicle', flat=True)
+                ).values_list("vehicle", flat=True)
             )
-            
+
             # If no available vehicles found, return a 404 error
             if not available_vehicles:
-                return Response({"message": "No vehicles are available during this time range."}, status=status.HTTP_404_NOT_FOUND)
+                return Response(
+                    {"message": "No vehicles are available during this time range."},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
 
             # Serialize the list of available vehicles
             vehicle_serializer = VehicleSerializer(available_vehicles, many=True)

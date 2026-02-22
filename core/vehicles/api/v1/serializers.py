@@ -137,7 +137,6 @@ class VehicleReviewSerializer(serializers.ModelSerializer):
         return data
 
 
-
 class VehicleAvailabilityRequestSerializer(serializers.Serializer):
     start_time = serializers.DateTimeField()
     end_time = serializers.DateTimeField()
