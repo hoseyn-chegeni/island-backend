@@ -14,6 +14,7 @@ class VehicleType(models.TextChoices):
     JET_SKI = "JET_SKI", "Jet Ski"
     BOAT = "BOAT", "Motor Boat"
     KAYAK = "KAYAK", "Kayak / Canoe"
+    YACHT = "YACHT", "Yacht"
 
 
 class VehicleStatus(models.TextChoices):
