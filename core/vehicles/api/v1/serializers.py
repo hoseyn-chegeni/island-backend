@@ -10,7 +10,7 @@ from vehicles.models import (
 from accounts.models import VendorV2
 from rentals.models import VehicleAvailability
 from rentals.models import VehicleRental
-
+from ...choices import VehicleType
 
 class VehicleCategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -140,3 +140,4 @@ class VehicleReviewSerializer(serializers.ModelSerializer):
 class VehicleAvailabilityRequestSerializer(serializers.Serializer):
     start_time = serializers.DateTimeField()
     end_time = serializers.DateTimeField()
+    type = serializers.ChoiceField(choices=VehicleType.choices, required=False, allow_blank=True)
