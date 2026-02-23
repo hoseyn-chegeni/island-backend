@@ -24,7 +24,7 @@ class Otp(models.Model):
     user = models.ForeignKey(UserV2, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
-        return f"OTP for {self.user} - Status: {self.otp_status}"
+        return f"OTP for {self.user} - Code: {self.code}"
 
 
 class ReserveRequest(models.Model):
