@@ -3,5 +3,5 @@ from django.urls import path,include
 
 
 urlpatterns = [
-    path("api/v1", include("events.api.urls"))
+    path("api/v1/", include("events.api.v1.urls"))
 ]
