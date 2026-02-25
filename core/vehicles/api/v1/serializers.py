@@ -12,6 +12,7 @@ from rentals.models import VehicleAvailability
 from rentals.models import VehicleRental
 from ...choices import VehicleType
 
+
 class VehicleCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
@@ -140,14 +141,16 @@ class VehicleReviewSerializer(serializers.ModelSerializer):
 class VehicleAvailabilityRequestSerializer(serializers.Serializer):
     start_time = serializers.DateTimeField(required=False, allow_null=True)
     end_time = serializers.DateTimeField(required=False, allow_null=True)
-    type = serializers.ChoiceField(choices=VehicleType.choices, required=False, allow_blank = True)
+    type = serializers.ChoiceField(
+        choices=VehicleType.choices, required=False, allow_blank=True
+    )
 
     def to_internal_value(self, data):
         # Handle the empty string case for DateTimeField fields
-        if 'start_time' in data and data['start_time'] == "":
-            data['start_time'] = None
-        if 'end_time' in data and data['end_time'] == "":
-            data['end_time'] = None
+        if "start_time" in data and data["start_time"] == "":
+            data["start_time"] = None
+        if "end_time" in data and data["end_time"] == "":
+            data["end_time"] = None
         return super().to_internal_value(data)
 
     def validate_start_time(self, value):

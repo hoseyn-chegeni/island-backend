@@ -289,12 +289,17 @@ class VehicleAvailabilityView(APIView):
         if serializer.is_valid():
             start_time = serializer.validated_data.get("start_time", None)
             end_time = serializer.validated_data.get("end_time", None)
-            vehicle_type = request.data.get("type", "")  # Get vehicle type from request data, default to empty string
+            vehicle_type = request.data.get(
+                "type", ""
+            )  # Get vehicle type from request data, default to empty string
 
             # Build the query to filter available vehicles
             available_vehicles = Vehicle.objects.exclude(
                 id__in=VehicleAvailability.objects.filter(
-                    date__range=[start_time.date() if start_time else None, end_time.date() if end_time else None]
+                    date__range=[
+                        start_time.date() if start_time else None,
+                        end_time.date() if end_time else None,
+                    ]
                 ).values_list("vehicle", flat=True)
             )
 

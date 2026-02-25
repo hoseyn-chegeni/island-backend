@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "rentals",
     "blogs",
     "notification",
+    "events",
 ]
 
 MIDDLEWARE = [
@@ -189,7 +190,6 @@ CORS_ALLOW_METHODS = (
     "POST",
     "PUT",
 )
-
 
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10MB in bytes
