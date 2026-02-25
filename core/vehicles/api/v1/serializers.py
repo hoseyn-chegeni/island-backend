@@ -142,7 +142,7 @@ class VehicleAvailabilityRequestSerializer(serializers.Serializer):
     start_time = serializers.DateTimeField(required=False, allow_null=True)
     end_time = serializers.DateTimeField(required=False, allow_null=True)
     type = serializers.ChoiceField(
-        choices=VehicleType.choices, required=False, allow_blank=True
+        choices=VehicleType.choices, required=False, allow_blank=True, allow_null = True
     )
 
     def to_internal_value(self, data):
