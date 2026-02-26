@@ -59,7 +59,7 @@ class VehicleList(ListCreateAPIView):
         "is_top",
     ]
     search_fields = ["brand", "model", "=plate_number"]
-    ordering_fields = ["created_at", "price_per_day"]  # Add price_per_day to the ordering fields
+    ordering_fields = ["created_at", "price_per_day"]
     pagination_class = LargeResultSetPagination
 
     @swagger_auto_schema(
@@ -97,6 +97,15 @@ class VehicleList(ListCreateAPIView):
                 'category', openapi.IN_QUERY, description="Filter by category",
                 type=openapi.TYPE_STRING
             ),
+            # Adding price range filter parameters
+            openapi.Parameter(
+                'price_min', openapi.IN_QUERY, description="Minimum price for the vehicle per day",
+                type=openapi.TYPE_INTEGER
+            ),
+            openapi.Parameter(
+                'price_max', openapi.IN_QUERY, description="Maximum price for the vehicle per day",
+                type=openapi.TYPE_INTEGER
+            ),
         ]
     )
     def get(self, request, *args, **kwargs):
@@ -108,6 +117,8 @@ class VehicleList(ListCreateAPIView):
         color = request.query_params.get('color', None)
         status = request.query_params.get('status', None)
         category = request.query_params.get('category', None)
+        price_min = request.query_params.get('price_min', None)
+        price_max = request.query_params.get('price_max', None)
 
         # Start with the base queryset
         available_vehicles = Vehicle.objects.all()
@@ -144,6 +155,12 @@ class VehicleList(ListCreateAPIView):
                 vehicleavailability__date__gte=start_time.date(),
                 vehicleavailability__date__lte=end_time.date()
             ).distinct()
+
+        # Apply price range filter if 'price_min' or 'price_max' is provided
+        if price_min is not None:
+            available_vehicles = available_vehicles.filter(price_per_day__gte=price_min)
+        if price_max is not None:
+            available_vehicles = available_vehicles.filter(price_per_day__lte=price_max)
 
         # Perform search if 'search' term is provided
         search_term = request.query_params.get('search', None)
