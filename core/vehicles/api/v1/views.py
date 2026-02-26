@@ -43,7 +43,6 @@ from rentals.models import VehicleAvailability
 from django.db.models import Q
 
 
-
 class VehicleList(ListCreateAPIView):
     serializer_class = VehicleSerializer
     queryset = Vehicle.objects.all()
@@ -60,7 +59,7 @@ class VehicleList(ListCreateAPIView):
         "is_top",
     ]
     search_fields = ["brand", "model", "=plate_number"]
-    ordering_fields = ["created_at"]
+    ordering_fields = ["created_at", "price_per_day"]  # Add price_per_day to the ordering fields
     pagination_class = LargeResultSetPagination
 
     @swagger_auto_schema(
@@ -155,10 +154,14 @@ class VehicleList(ListCreateAPIView):
                 Q(plate_number__icontains=search_term)
             )
 
+        # Handle ordering based on query params
+        ordering = request.query_params.get('ordering', None)
+        if ordering:
+            available_vehicles = available_vehicles.order_by(ordering)
+
         # Return the filtered vehicles
         serializer = self.get_serializer(available_vehicles, many=True)
         return Response(serializer.data)
-    
 
 
 class VehicleDetail(RetrieveUpdateDestroyAPIView):
