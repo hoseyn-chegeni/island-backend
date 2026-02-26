@@ -37,6 +37,11 @@ from rest_framework.views import APIView
 from datetime import timedelta
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.response import Response
+from datetime import datetime
+from rentals.models import VehicleAvailability
+from django.db.models import Q
+
 
 
 class VehicleList(ListCreateAPIView):
@@ -58,13 +63,102 @@ class VehicleList(ListCreateAPIView):
     ordering_fields = ["created_at"]
     pagination_class = LargeResultSetPagination
 
-    @swagger_auto_schema(tags=["Vehicles"])
+    @swagger_auto_schema(
+        tags=["Vehicles"],
+        manual_parameters=[
+            openapi.Parameter(
+                'start_time', openapi.IN_QUERY, description="Start time for the availability range",
+                type=openapi.TYPE_STRING, format=openapi.FORMAT_DATETIME
+            ),
+            openapi.Parameter(
+                'end_time', openapi.IN_QUERY, description="End time for the availability range",
+                type=openapi.TYPE_STRING, format=openapi.FORMAT_DATETIME
+            ),
+            openapi.Parameter(
+                'type', openapi.IN_QUERY, description="Vehicle type",
+                type=openapi.TYPE_STRING
+            ),
+            openapi.Parameter(
+                'is_top', openapi.IN_QUERY, description="Filter vehicles that are marked as 'top'",
+                type=openapi.TYPE_BOOLEAN
+            ),
+            openapi.Parameter(
+                'brand', openapi.IN_QUERY, description="Filter by vehicle brand",
+                type=openapi.TYPE_STRING
+            ),
+            openapi.Parameter(
+                'color', openapi.IN_QUERY, description="Filter by vehicle color",
+                type=openapi.TYPE_STRING
+            ),
+            openapi.Parameter(
+                'status', openapi.IN_QUERY, description="Filter by vehicle status",
+                type=openapi.TYPE_STRING
+            ),
+            openapi.Parameter(
+                'category', openapi.IN_QUERY, description="Filter by category",
+                type=openapi.TYPE_STRING
+            ),
+        ]
+    )
     def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
+        start_time = request.query_params.get('start_time', None)
+        end_time = request.query_params.get('end_time', None)
+        vehicle_type = request.query_params.get('type', None)
+        is_top = request.query_params.get('is_top', None)
+        brand = request.query_params.get('brand', None)
+        color = request.query_params.get('color', None)
+        status = request.query_params.get('status', None)
+        category = request.query_params.get('category', None)
 
-    @swagger_auto_schema(tags=["Vehicles"])
-    def post(self, request, *args, **kwargs):
-        return super().post(request, *args, **kwargs)
+        # Start with the base queryset
+        available_vehicles = Vehicle.objects.all()
+
+        # Apply filters for type, is_top, brand, color, status, and category
+        if vehicle_type:
+            available_vehicles = available_vehicles.filter(type=vehicle_type)
+
+        # Convert 'is_top' from string to boolean (if passed as a string)
+        if is_top is not None:
+            is_top = is_top.lower() == 'true'
+            available_vehicles = available_vehicles.filter(is_top=is_top)
+
+        if brand:
+            available_vehicles = available_vehicles.filter(brand__name=brand)
+        if color:
+            available_vehicles = available_vehicles.filter(color=color)
+        if status:
+            available_vehicles = available_vehicles.filter(status=status)
+        if category:
+            available_vehicles = available_vehicles.filter(category__name=category)
+
+        # If both start_time and end_time are provided, filter vehicles by availability dates
+        if start_time and end_time:
+            try:
+                start_time = datetime.fromisoformat(start_time)  # Converts to datetime
+                end_time = datetime.fromisoformat(end_time)  # Converts to datetime
+            except ValueError:
+                # Raise a valid 400 error if the datetime is invalid
+                return Response({"error": "Invalid date format. Use ISO format."}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Exclude vehicles with unavailable dates in the given time range
+            available_vehicles = available_vehicles.exclude(
+                vehicleavailability__date__gte=start_time.date(),
+                vehicleavailability__date__lte=end_time.date()
+            ).distinct()
+
+        # Perform search if 'search' term is provided
+        search_term = request.query_params.get('search', None)
+        if search_term:
+            available_vehicles = available_vehicles.filter(
+                Q(brand__name__icontains=search_term) |
+                Q(model__icontains=search_term) |
+                Q(plate_number__icontains=search_term)
+            )
+
+        # Return the filtered vehicles
+        serializer = self.get_serializer(available_vehicles, many=True)
+        return Response(serializer.data)
+    
 
 
 class VehicleDetail(RetrieveUpdateDestroyAPIView):
