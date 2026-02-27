@@ -63,11 +63,16 @@ class Event(models.Model):
 
     @property
     def duration(self):
-        return self.end_date - self.start_date
+        if self.start_date and self.end_date:
+            return self.end_date - self.start_date
+        return None  # or return a default value like timedelta(0) if you prefer a default value
     
     @property
     def total_capacity(self):
-        return self.venue_capacity + self.vip_venue_capacity
+        venue_capacity = self.venue_capacity if self.venue_capacity is not None else 0
+        vip_venue_capacity = self.vip_venue_capacity if self.vip_venue_capacity is not None else 0
+        return venue_capacity + vip_venue_capacity
+
 
     class Meta:
         ordering = ['start_date']

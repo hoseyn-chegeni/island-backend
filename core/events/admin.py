@@ -4,11 +4,9 @@ from .models import Event,EventType,Ticket
 
 
 class EventAdmin(admin.ModelAdmin):
-
     # Define methods for properties to show them in the admin list
     def total_capacity(self, obj):
         return obj.total_capacity
-
     
     def duration(self, obj):
         return obj.duration
